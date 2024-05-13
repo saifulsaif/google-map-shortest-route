@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Area Calculator</title>
+    <style>
+        /* Make the map fullscreen */
+        #map {
+            height: 100vh; /* Full height of the viewport */
+            width: 100vw; /* Full width of the viewport */
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=Your_MAP_API_KEY&libraries=drawing,places"></script>
+    <script>
+
+let map;
+let drawingManager;
+let selectedShape;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 52.5200, lng: 13.4050 }, // Adjust the coordinates to your specific focus area
+        zoom: 12, // A closer zoom level to show more detail
+        mapTypeId: google.maps.MapTypeId.HYBRID, // Set the default map type to satellite
+        styles: [
+            {
+                featureType: "all",
+                elementType: "labels",
+                stylers: [{ visibility: "on" }] // Turn on labels for all features
+            },
+            { // Enhance visibility of points of interest
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{ visibility: "on" }]
+            },
+            { // Adjust the landscape color and label visibility
+                featureType: "landscape",
+                elementType: "geometry",
+                stylers: [{ visibility: "simplified" }, { color: "#fcfcfc" }]
+            },
+            { // Make the water labels visible
+                featureType: "water",
+                elementType: "labels.text.stroke",
+                stylers: [{ visibility: "on" }]
+            }
+        ]
+    });
+
+    drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.POLYGON,
+        drawingControl: true,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: ['polygon'],
+        },
+        polygonOptions: {
+            editable: true,
+            strokeColor: '#FF0000', // Red line color
+            fillColor: '#FF0000' // Red fill color
+        },
+    });
+    drawingManager.setMap(map);
+    
+
+    // Setup the delete button
+    document.getElementById('delete-button').addEventListener('click', function() {
+        if (selectedShape) {
+            selectedShape.setMap(null);
+            selectedShape = null;
+        }
+    });
+
+     // Setup the search box
+     const input = document.getElementById('pac-input');
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            map.addListener('bounds_changed', function() {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            let markers = [];
+            searchBox.addListener('places_changed', function() {
+                const places = searchBox.getPlaces();
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(marker => marker.setMap(null));
+                markers = [];
+
+                // Create markers for each place.
+                const bounds = new google.maps.LatLngBounds();
+                places.forEach(place => {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    const icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+
+    google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+        if (selectedShape) {
+            selectedShape.setMap(null);
+        }
+        selectedShape = event.overlay;
+        selectedShape.type = event.type;
+    });
+}
+
+function exportArea() {
+    if (!selectedShape) {
+        alert("Please draw an area on the map first.");
+        return;
+    }
+    const path = selectedShape.getPath();
+    const area = google.maps.geometry.spherical.computeArea(path);
+    alert("The area is " + area.toFixed(2) + " square meters.");
+}
+
+window.onload = initMap;
+
+
+    </script>
+</head>
+<body>
+    <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+    <div id="map"></div>
+    <button id="delete-button" class="controls" style="top: 50px;">Delete Drawing</button>
+    <button onclick="exportArea()">Export Area</button>
+</body>
+</html>
