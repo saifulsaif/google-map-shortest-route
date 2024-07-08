@@ -1,196 +1,73 @@
-
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Locations Map</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Filter Example</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHPa9Galho8-lZB0mgM8Rw4I-YbNUhcUk&callback=initMap&libraries=&v=weekly" async defer></script>
     <style>
-        /* Set the size of the map */
         #map {
             height: 100vh;
             width: 100%;
+        }
+        #map-filter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            z-index: 5;
+            border-radius: 5px;
+        }
+        .input-filed{
+            order: 1px solid #C1C1C1;
+            height: 34px;
+            padding: 0 3px;
+            border-radius: 4px;
+        }
+        .button{
+            background: #1477bc;
+            color: #fff;
+            font-weight: 500;
+            padding: 0 30px;
+            border: 1px solid transparent;
+            gap: 10px;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            height: 34px;
+            font-size: 14px;
+            z-index: 2;
+            overflow: hidden;
+            text-align: center;
+            border-radius: 4px;
+            line-height: 45px;
+            justify-content: center;
+            align-items: center;
+            display: inline-flex;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
         }
     </style>
 </head>
 <body>
     <div id="map-filter">
-        <label for="category">Category:</label>
-        <select id="category">
+        <select class="input-filed" id="category">
             <option value="">Select a Category</option>
             <!-- Options will be dynamically filled based on JSON data -->
         </select>
-    
-        <label for="type">Type:</label>
-        <select id="type">
+
+        <select class="input-filed"  id="type">
             <option value="">Select a Type</option>
             <!-- Options will be dynamically filled based on JSON data -->
         </select>
-    
-        <button onclick="filterMarkers()">Filter</button>
+
+        <button class="button" onclick="filterMarkers()">Filter</button>
     </div>
-    <div id="map" style="height: 500px;"></div> <!-- Placeholder for Google Maps -->
-    
     <div id="map"></div>
     <script>
+        let map;
+        let markers = [];
 
-    let map;
-    let markers = [];
-
-
-    var otherItems = getOtherItems();
-    var mapFestival = getMapFestival();
-    var mapBusnesses = getMapBusinesses();
-    var locations = mapFestival.concat(otherItems);
-    const jsonData  = locations.concat(mapBusnesses);
-
-
-
-    function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: {lat: 42.6046041, lng: -72.7394789},
-        styles: [
-            {
-                featureType: "poi",
-                elementType: "labels",
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "transit",
-                elementType: "labels.icon",
-                stylers: [{ visibility: "off" }]
-            }
-        ] // Adjust this to better center your map
-    });
-
-
-
-    addMarkers(jsonData);
-    populateFilters();
-    }
-
-    function populateFilters() {
-    const categorySet = new Set();
-    const typeSet = new Set();
-
-    jsonData.forEach(item => {
-        categorySet.add(item.category);
-        typeSet.add(item.type);
-    });
-
-    categorySet.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.text = category;
-        document.getElementById('category').appendChild(option);
-    });
-
-    typeSet.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.text = type;
-        document.getElementById('type').appendChild(option);
-    });
-}
-
-
-function filterMarkers() {
-    const selectedCategory = document.getElementById('category').value;
-    const selectedType = document.getElementById('type').value;
-
-    const filteredData = jsonData.filter(item => {
-        return (selectedCategory ? item.category === selectedCategory : true) &&
-               (selectedType ? item.type === selectedType : true);
-    });
-
-    addMarkers(filteredData);
-}
-
-
-function addMarkers(data) {
-    markers.forEach(marker => marker.setMap(null)); // Clear existing markers
-    markers = [];
-console.log(data);
-data.forEach(function(location) {
-        var marker = new google.maps.Marker({
-            position: location.coords,
-            map: map,
-            icon: getIcon(location.type)
-        });
-
-        var infoWindow = new google.maps.InfoWindow({
-            content: location.content
-        });
-
-        marker.addListener('click', function() {
-            infoWindow.open(map, marker);
-        });
-    });
-}
-
-    // var businesses =  getBusinesses();
-    // convertFestivalsToMapData(businesses)
-    // .then(mapData => console.log(mapData))
-    // .catch(error => console.error('Error in converting festivals data:', error));
-
-   
-
-    // locations.forEach(function(location) {
-    //     var marker = new google.maps.Marker({
-    //         position: location.coords,
-    //         map: map,
-    //         icon: getIcon(location.type)
-    //     });
-
-    //     var infoWindow = new google.maps.InfoWindow({
-    //         content: location.content
-    //     });
-
-    //     marker.addListener('click', function() {
-    //         infoWindow.open(map, marker);
-    //     });
-    // });
-
-    // Function to choose marker color
-    function getIcon(type) {
-        switch (type) {
-            case 'parking':
-                return 'transport.png';
-            case 'bathroom':
-                return 'washroom.png';
-            case 'shuttle':
-                return 'school1.png';
-            case 'business':
-                return 'store.png';
-            case 'festival':
-                return 'data:image/png;base64,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';
-            default:
-                return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'; // Default icon
-        }
-    }
-
-
-function getOtherItems(){
-    return [
-        {coords: {lat: 42.60524436797167, lng: -72.73386971767924}, type: 'parking', content: '<h4>at 17 Severance Street</h4>'},
-        {coords: {lat: 42.615644, lng: -72.734867}, type: 'parking', content: '<h4>Parking at Main Street</h4>'},
-        {coords: {lat: 42.60175660184989, lng: -72.73775668429583}, type: 'parking', content: '<h4>Parking at 49 Conway</h4>'},
-        {coords: {lat: 42.608835, lng: -72.734476}, type: 'bathroom', content: '<h4>Bathroom at 75 Mechanic Street</h4>'},
-        {coords: {lat: 42.605647, lng: -72.733559}, type: 'bathroom', content: '<h4>Bathroom at 17 Severance Street</h4>'},
-        {coords: {lat: 42.603512, lng: -72.737778}, type: 'bathroom', content: '<h4>Bathroom at 75 Bridge Street</h4>'},
-        {coords: {lat: 42.60175660184989, lng: -72.73785668429588}, type: 'bathroom', content: '<h4>Bathroom at 49 Conway</h4>'},
-        {coords: {lat: 42.608835, lng: -72.734876}, type: 'shuttle', content: '<h4>Shuttle Stop at 75 Mechanic Street</h4>'},
-        {coords: {lat: 42.605647, lng: -72.733759}, type: 'shuttle', content: '<h4>Shuttle Stop at 17 Severance Street</h4>'},
-        {coords: {lat: 42.603504, lng: -72.737939}, type: 'shuttle', content: '<h4>Shuttle Stop at 75 Bridge Street</h4>'},
-        {coords: {lat: 42.60175660184989, lng: -72.73795668429510}, type: 'shuttle', content: '<h4>Shuttle Stop at 49 Conway</h4>'}
-        // Add more markers as needed
-    ];
-}
-
-
-
-function getMapFestival(){
-    return [
+        const jsonData = [
     {
         "coords": {
             "lat": 42.60741530000001,
@@ -892,19 +769,101 @@ function getMapFestival(){
         "time": 0.7083333333333334,
         "time_con": "12:43 AM",
         "content": "<div>\n                    <h4>Lonesome Jenny</h4>\n                    <p>Folk, blues, honky-tonk, Americana</p>\n                    <p>Address: 53 Bridge St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 12:43 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"undefined\">More Info</a>\n                </div>"
-    }
-];
-}
-
-
-function getMapBusinesses(){
-    return [
+    },
+    {
+        "coords": {
+            "lat": 42.60524436797167,
+            "lng": -72.73386971767924
+        },
+        "type": "parking",
+        "content": "<h4>at 17 Severance Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.615644,
+            "lng": -72.734867
+        },
+        "type": "parking",
+        "content": "<h4>Parking at Main Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.60175660184989,
+            "lng": -72.73775668429583
+        },
+        "type": "parking",
+        "content": "<h4>Parking at 49 Conway</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.608835,
+            "lng": -72.734476
+        },
+        "type": "bathroom",
+        "content": "<h4>Bathroom at 75 Mechanic Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.605647,
+            "lng": -72.733559
+        },
+        "type": "bathroom",
+        "content": "<h4>Bathroom at 17 Severance Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.603512,
+            "lng": -72.737778
+        },
+        "type": "bathroom",
+        "content": "<h4>Bathroom at 75 Bridge Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.60175660184989,
+            "lng": -72.73785668429588
+        },
+        "type": "bathroom",
+        "content": "<h4>Bathroom at 49 Conway</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.608835,
+            "lng": -72.734876
+        },
+        "type": "shuttle",
+        "content": "<h4>Shuttle Stop at 75 Mechanic Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.605647,
+            "lng": -72.733759
+        },
+        "type": "shuttle",
+        "content": "<h4>Shuttle Stop at 17 Severance Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.603504,
+            "lng": -72.737939
+        },
+        "type": "shuttle",
+        "content": "<h4>Shuttle Stop at 75 Bridge Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.60175660184989,
+            "lng": -72.7379566842951
+        },
+        "type": "shuttle",
+        "content": "<h4>Shuttle Stop at 49 Conway</h4>"
+    },
     {
         "coords": {
             "lat": 42.6047976,
             "lng": -72.735337
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Davis Bates @ 12 High Street",
         "address": "12 High Street, Shelburne Falls, MA 01370, USA",
         "category": "Children of all ages",
@@ -917,7 +876,7 @@ function getMapBusinesses(){
             "lat": 42.6038055,
             "lng": -72.73777
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Arms Library @60 Bridge Street",
         "address": "60 Bridge Street, Shelburne Falls, MA 01370, USA",
         "category": "Children of all ages",
@@ -930,7 +889,7 @@ function getMapBusinesses(){
             "lat": 42.60349300000001,
             "lng": -72.7387311
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Mocha Maya's Cafe",
         "address": "47 Bridge Street, Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -943,7 +902,7 @@ function getMapBusinesses(){
             "lat": 42.6037289,
             "lng": -72.73926689999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Shelburne Arts Cooperative",
         "address": "26 Bridge St, Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -956,7 +915,7 @@ function getMapBusinesses(){
             "lat": 42.6038126,
             "lng": -72.7394146
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Watermark Gallery",
         "address": "20 Bridge Street, Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -969,7 +928,7 @@ function getMapBusinesses(){
             "lat": 42.603674,
             "lng": -72.741619
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Mo's Fudge Factor",
         "address": "9 State Street, Shelburne Falls, MA 01370, USA",
         "category": "Children of all ages",
@@ -982,7 +941,7 @@ function getMapBusinesses(){
             "lat": 42.6021352,
             "lng": -72.74150209999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Salmon Falls Gallery",
         "address": "1 Ashfield Street, Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -995,7 +954,7 @@ function getMapBusinesses(){
             "lat": 42.6020017,
             "lng": -72.7407949
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Ann Brauer Quilt Studio",
         "address": "2 Conway Street, Shelburne Falls, MA 01370, USA",
         "category": "Crafts, quilts, clay and more",
@@ -1008,7 +967,7 @@ function getMapBusinesses(){
             "lat": 42.6011263,
             "lng": -72.73758459999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Radyshes",
         "address": "The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA",
         "category": "Children of all ages",
@@ -1021,7 +980,7 @@ function getMapBusinesses(){
             "lat": 42.6011263,
             "lng": -72.73758459999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Wool & Weft",
         "address": "The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA",
         "category": "Crafts, quilts, clay and more",
@@ -1034,7 +993,7 @@ function getMapBusinesses(){
             "lat": 42.6011263,
             "lng": -72.73758459999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Worn at the Edges",
         "address": "The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA",
         "category": "Crafts, quilts, clay and more",
@@ -1046,7 +1005,7 @@ function getMapBusinesses(){
             "lat": 42.6011263,
             "lng": -72.73758459999999
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "The Handle Factory Community Clay Center",
         "address": "The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA",
         "category": "Crafts, quilts, clay and more",
@@ -1059,7 +1018,7 @@ function getMapBusinesses(){
             "lat": 42.6011464,
             "lng": -72.7384369
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Pastels4now",
         "address": "The Mill 49 Conway Street - Studio 201 , Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -1069,10 +1028,10 @@ function getMapBusinesses(){
     },
     {
         "coords": {
-            "lat": 42.604440,
+            "lat": 42.60444,
             "lng": -72.739613
         },
-        "type": "business",
+        "type": "ArtsWalk",
         "name": "Amherst Plein Air Society",
         "address": "Meet at Bridge of Flowers , Shelburne Falls, MA 01370, USA",
         "category": "Visual Art",
@@ -1080,75 +1039,105 @@ function getMapBusinesses(){
         "time_con": "12:NaN AM",
         "content": "<div>\n                    <h4>Amherst Plein Air Society</h4>\n                    <p>Painters will be setting up their easels and painting landscapes throughout the village from 9-12, with a critique at the end of the Bridge of Flowers from 12-1.</p>\n                    <p>Address: Meet at Bridge of Flowers , Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 12:NaN AM</p>\n                    <p>Category: Visual Art</p>\n                    <a href=\"undefined\">More Info</a>\n                </div>"
     }
-];
-}
+]; // Paste your JSON data here
 
-
-function getCoordinates(address) {
-    const apiKey = 'AIzaSyCyxRFJUBD8FoaQr6OzTeMFadxFMau08RA';
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.results && data.results.length > 0) {
-                const location = data.results[0].geometry.location;
-                return { lat: location.lat, lng: location.lng };
-            } else {
-                throw new Error('No results found for address: ' + address);
-            }
-        });
-}
-
-function convertFestivalsToMapData(festivals) {
-    const promises = festivals.map(festival => {
-        return getCoordinates(festival['Venue_address'])
-            .then(coords => {
-                const content = `<div>
-                    <h4>${festival['Business Name']}</h4>
-                    <p>${festival['Description']}</p>
-                    <p>Address: ${festival['Venue_address']}</p>
-                    <p>Time: ${convertDecimalToTime(festival['Time'])}</p>
-                    <p>Category: ${festival['Category']}</p>
-                    <a href="${festival['Source Url']}">More Info</a>
-                </div>`;
-
-                return {
-                    coords: coords,
-                    type: 'festival',
-                    name:festival['Business Name'],
-                    address: festival['Venue_address'],
-                    category: festival['Category'],
-                    time: festival['Time'],
-                    time_con: convertDecimalToTime(festival['Time']),
-                    type: 'business',
-                    content: content
-                };
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 42.603, lng: -72.739 },
+                zoom: 16,
+                styles: [
+                            {
+                                featureType: "poi",
+                                elementType: "labels",
+                                stylers: [{ visibility: "off" }]
+                            },
+                            {
+                                featureType: "transit",
+                                elementType: "labels.icon",
+                                stylers: [{ visibility: "off" }]
+                            }
+                    ],
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
             });
-    });
 
-    return Promise.all(promises);
-}
+            addMarkers(jsonData);
+            populateFilters();
+        }
 
+        function populateFilters() {
+            const categorySet = new Set();
+            const typeSet = new Set();
 
-function convertDecimalToTime(decimalTime) {
-    const hours = Math.floor(decimalTime);
-    const minutes = Math.round((decimalTime - hours) * 60);
+            jsonData.forEach(item => {
+                categorySet.add(item.category);
+                typeSet.add(item.type);
+            });
 
-    // Determine AM or PM suffix and adjust hours for 12-hour format
-    const suffix = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 || 12; // Converts '0' hour to '12' for 12-hour format
+            categorySet.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.text = category;
+                document.getElementById('category').appendChild(option);
+            });
 
-    // Format minutes to be two digits
-    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            typeSet.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.text = type;
+                document.getElementById('type').appendChild(option);
+            });
+        }
 
-    // Combine the formatted time parts
-    return `${formattedHours}:${formattedMinutes} ${suffix}`;
-}
+        function addMarkers(data) {
+            markers.forEach(marker => marker.setMap(null)); // Clear existing markers
+            markers = [];
 
+            data.forEach(item => {
+                const marker = new google.maps.Marker({
+                    position: { lat: item.coords.lat, lng: item.coords.lng },
+                    map: map,
+                    title: item.name,
+                    icon: getIcon(item.type)
+                });
+                const infoWindow = new google.maps.InfoWindow({
+                    content: item.content
+                });
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+                markers.push(marker);
+            });
+        }
 
+        function getIcon(type) {
+            switch (type) {
+                case 'parking':
+                    return 'transport.png';
+                case 'bathroom':
+                    return 'washroom.png';
+                case 'shuttle':
+                    return 'school1.png';
+                case 'ArtsWalk':
+                    return 'store.png';
+                case 'festival':
+                    return 'data:image/png;base64,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';
+                default:
+                    return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'; // Default icon
+            }
+        }
+
+        function filterMarkers() {
+            const selectedCategory = document.getElementById('category').value;
+            const selectedType = document.getElementById('type').value;
+
+            const filteredData = jsonData.filter(item => {
+                return (selectedCategory ? item.category === selectedCategory : true) &&
+                       (selectedType ? item.type === selectedType : true);
+            });
+
+            addMarkers(filteredData);
+        }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyxRFJUBD8FoaQr6OzTeMFadxFMau08RA&callback=initMap"></script>
 </body>
 </html>
-
