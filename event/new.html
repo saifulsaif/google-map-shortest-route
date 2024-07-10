@@ -62,14 +62,14 @@
 
         <select id="time" onchange="resetFilters('time')"  class="input-filed">
             <option value="">Select a Time</option>
-            <option value="AllTime">All Time</option>
             <option value="11:00">11:00 AM</option>
-            <option value="Noon">Noon</option>
+            <option value="Noon">12:00 - Noon</option>
             <option value="01:00">01:00 PM</option>
             <option value="02:00">02:00 PM</option>
             <option value="03:00">03:00 PM</option>
             <option value="04:00">04:00 PM</option>
             <option value="05:00">05:00 PM</option>
+            <option value="AllTime">Long Time</option>
         </select>
         <!-- <button class="button" onclick="filterMarkers()">Filter</button> -->
     </div>
@@ -783,8 +783,18 @@
     },
     {
         "coords": {
-            "lat": 42.60524436797167,
-            "lng": -72.73386971767924
+            "lat": 42.60852866755512,
+            "lng": -72.73448644892197
+        },
+        "type": "parking",
+        "time": "AllTime",
+        "time_con": "AllTime",
+        "content": "<h4>75 Mechanic Street</h4>"
+    },
+    {
+        "coords": {
+            "lat": 42.6052364711711,
+            "lng": -72.73336546241607
         },
         "type": "parking",
         "time": "AllTime",
@@ -803,8 +813,8 @@
     },
     {
         "coords": {
-            "lat": 42.60175660184989,
-            "lng": -72.73775668429583
+            "lat": 42.60112481929045,
+            "lng": -72.73758502296293
         },
         "type": "parking",
         "time": "AllTime",
