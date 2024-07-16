@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.3/main.min.css' rel='stylesheet' />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    #calendar {
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+    .fc-event-resizer {
+      border-radius: 50%; /* Make resize handles round */
+      background-color: #fff; /* White color icons */
+      border: 2px solid #666; /* Border to make it more visible */
+      width: 10px;
+      height: 10px;
+      display: block; /* Ensure they are always visible */
+    }
+    .fc-event-resizer.fc-start-resizer {
+      position: absolute;
+      top: 50%; /* Center vertically on the top edge */
+      right: -5px !important; /* Positioned on the right side of the top edge */
+      transform: translateY(-50%); /* Center the circle vertically */
+    }
+    .fc-event-resizer.fc-end-resizer {
+      position: absolute;
+      bottom: -5px;
+      left: -5px; /* Positioned on the bottom left of the event */
+    }
+    .full-width-event .fc-event-main-frame {
+        width: 100%; /* Ensures the event takes the full available width */
+    }
+  </style>
+</head>
+<body>
+  <div id='calendar'></div>
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var eventCounter = 0;
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'timeGridWeek', // Set the initial view to weekly
+              editable: true, // Enable drag and drop
+              droppable: true, // Allow external events to be dropped
+              selectable: true,
+              selectMirror: true,
+              eventResizableFromStart: true,
+              events: getEvents(), // all events show here
+              eventContent: function(arg) {
+                  return getEventContent(arg);
+              },
+              select: function(selectionInfo) {
+                  MouseClickAddEvents(selectionInfo, calendar); // mouse clcik add events
+              },
+              eventDidMount: function(arg) {
+                  eventDidMount(arg);
+              },
+              eventClick: function(info) {
+                  clcikOnEvent(info);
+              },
+              eventDragStart: function(info) {
+                  createTemporaryEvent(info);
+                  sendDragAndDropEventRequest(info.event.id, info.event.start.toISOString(), info.event.end.toISOString());
+
+              },
+              eventDragStop: function(info) {
+                  removeTemporaryEvent();
+              },
+              eventResizeStart: function(info) {
+                  createTemporaryEvent(info);
+                  sendResizeEventRequest(info.event.id, info.event.start.toISOString(), info.event.end.toISOString());
+              },
+              eventResizeStop: function(info) {
+                  removeTemporaryEvent();
+                  sendRemoveEventRequest(info.event.id);
+              },
+            eventMouseEnter: function(info) {
+                info.el.setAttribute('data-original-color', info.event.backgroundColor);
+                info.event.setProp('backgroundColor', '#dec3e4');
+            },
+            eventMouseLeave: function(info) {
+                var originalColor = info.el.getAttribute('data-original-color');
+                info.event.setProp('backgroundColor', originalColor);
+            },
+
+          });
+
+          function clcikOnEvent(info) {
+              var newColor = '#9b6da8'; // Darker shade of the original color
+              info.event.setProp('color', newColor); // Change the color of the event
+          }
+
+
+          function MouseClickAddEvents(selectionInfo, calendar) {
+              eventCounter++; // Increment the counter each time an event is created
+              var title = 'title-' + eventCounter; // Generate title in the format 'title-X'
+
+              var event = {
+                  title: title,
+                  start: selectionInfo.start,
+                  end: selectionInfo.end,
+                  allDay: selectionInfo.allDay,
+                  color: '#bd89ca',
+                  createdViaSelect: true,
+              }
+
+              calendar.addEvent(event);
+              calendar.unselect(); // Clear selection after event is added
+              sendCreateEventRequest(event);
+          }
+
+          function createTemporaryEvent(info) {
+              tempEvent = {
+                  id: 'temp', // Temporary ID
+                  title: info.event.title,
+                  start: info.event.start,
+                  end: info.event.end,
+                  color: 'rgba(189, 137, 202, 0.5)',
+                  className: 'full-width-event',
+              };
+              calendar.addEvent(tempEvent);
+          }
+
+          function removeTemporaryEvent() {
+              let temp = calendar.getEventById('temp');
+              if (temp) {
+                  temp.remove();
+              }
+          }
+
+          function eventDidMount(arg) {
+              if (arg.event.extendedProps.createdViaSelect) {
+                  // Create a remove button only for events created via select
+                  var closeButton = document.createElement('button');
+                  closeButton.innerText = 'X';
+                  closeButton.style.position = 'absolute';
+                  closeButton.style.top = '-6px';
+                  closeButton.style.right = '-6px';
+                  closeButton.style.backgroundColor = 'rgb(254 252 255)';
+                  closeButton.style.color = '#000000';
+                  closeButton.style.border = 'none';
+                  closeButton.style.borderRadius = '50%';
+                  closeButton.style.width = '17px';
+                  closeButton.style.height = '17px';
+                  closeButton.style.cursor = 'pointer';
+                  closeButton.style.zIndex = '1000'; // Ensure it is above all other elements
+
+                  // Event listener to handle event removal
+                  closeButton.addEventListener('click', function(e) {
+                      e.stopPropagation(); // Prevent the event click from firing
+                      arg.event.remove(); // Remove the event from the calendar
+                  });
+
+                  // Append the close button to the event element
+                  arg.el.querySelector('.fc-event-main').appendChild(closeButton);
+              }
+          }
+
+          function getEventContent(arg) {
+              if (arg.event.extendedProps.type === 'buffer') {
+                  // Return an empty div for buffer events to ensure no text is displayed
+                  var bufferContent = document.createElement('div');
+                  return {
+                      domNodes: [bufferContent]
+                  };
+              } else {
+                  let startTime = new Date(arg.event.start).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                  });
+                  let endTime = new Date(arg.event.end).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                  });
+                  let totalMinutes = (arg.event.end - arg.event.start) / 60000; // Duration in minutes
+                  let hours = Math.floor(totalMinutes / 60);
+                  let minutes = totalMinutes % 60;
+                  let durationText = (hours > 0 ? hours + ' hours ' : '') + (minutes > 0 ? minutes + ' minutes' : '');
+
+                  let content = document.createElement('div');
+                  content.style.position = 'relative';
+                  content.style.height = '100%';
+
+                  let timeRange = document.createElement('div');
+                  timeRange.textContent = `${startTime} - ${endTime}`;
+                  timeRange.style.fontSize = '0.85em';
+                  timeRange.style.fontWeight = 'bold';
+
+                  let title = document.createElement('div');
+                  title.textContent = arg.event.title;
+                  title.style.marginTop = '5px'; // Space between time and title
+
+                  let serviceName = document.createElement('div');
+                  serviceName.textContent = arg.event.extendedProps.serviceName;
+                  serviceName.style.fontSize = '0.75em';
+                  serviceName.style.marginTop = '5px'; // Space between title and service
+
+                  let durationDisplay = document.createElement('div');
+                  durationDisplay.textContent = durationText;
+                  durationDisplay.style.fontSize = '0.75em';
+                  durationDisplay.style.position = 'absolute';
+                  durationDisplay.style.bottom = '0px'; // Positioned at the bottom of the container
+                  durationDisplay.style.width = '100%'; // Ensure it spans the full width
+                  durationDisplay.style.textAlign = 'center'; // Center-align text
+                  durationDisplay.style.fontWeight = 'bold';
+
+                  content.appendChild(timeRange);
+                  content.appendChild(title);
+                  content.appendChild(serviceName);
+                  content.appendChild(durationDisplay);
+
+                  return {
+                      domNodes: [content]
+                  };
+              }
+          }
+
+          function getEvents() {
+              return [ // Define demo events
+                  {
+                      id: '1',
+                      title: 'Event 1',
+                      start: '2024-07-14T14:00:00',
+                      end: '2024-07-14T18:00:00',
+                      color: '#bd89ca',
+                      serviceName: 'Service A'
+                  },
+                  {
+                      id: '2',
+                      title: 'Event 2',
+                      start: '2024-07-15T15:00:00',
+                      end: '2024-07-15T19:00:00',
+                      color: '#bd89ca',
+                      serviceName: 'Service B'
+                  },
+                  {
+                      id: '3',
+                      title: 'Testing',
+                      start: '2024-07-16T13:00:00',
+                      end: '2024-07-16T17:00:00',
+                      color: '#bd89ca',
+                      serviceName: 'Service c'
+                  },
+                  {
+                     id: '4',
+                      title: 'Lunch Break',
+                      start: '2024-07-12T13:00:00',
+                      end: '2024-07-12T14:00:00',
+                      color: '#808080', // Gray color for breaks
+                      display: 'background' // Optionally, make it a background event
+                  },
+                  {
+                      id: '5',
+                      title: 'Afternoon Break',
+                      start: '2024-07-14T16:00:00',
+                      end: '2024-07-14T16:30:00',
+                      color: '#808080',
+                      display: 'background'
+                  },
+                  {
+                      id: '6',
+                      title: 'Meeting with Client',
+                      start: '2024-07-17T10:00:00',
+                      end: '2024-07-17T14:00:00',
+                      color: '#bd89ca',
+                  },
+                  {
+                      id: '7',
+                      title: '',
+                      start: '2024-07-17T09:30:00',
+                      end: '2024-07-17T10:00:00',
+                      color: 'red', // Different color for buffer
+                      display: 'background',
+                      type: 'buffer'
+                  },
+                  {
+                      id: '8',
+                      title: '',
+                      start: '2024-07-17T14:00:00',
+                      end: '2024-07-17T14:30:00',
+                      color: 'red', // Different color for buffer
+                      display: 'background',
+                      type: 'buffer'
+                  }
+              ];
+          }
+
+          calendar.render();
+
+        function sendCreateEventRequest(eventData) {
+            fetch('/api/events/create', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventData)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Event created:', data))
+            .catch(error => console.error('Error creating event:', error));
+        }
+
+        function sendResizeEventRequest(eventId, newStart, newEnd) {
+            fetch(`/api/events/resize/${eventId}`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ start: newStart, end: newEnd })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Event resized:', data))
+            .catch(error => console.error('Error resizing event:', error));
+        }
+
+        function sendRemoveEventRequest(eventId) {
+            fetch(`/api/events/remove/${eventId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => console.log('Event removed:', data))
+            .catch(error => console.error('Error removing event:', error));
+        }
+
+        function sendDragAndDropEventRequest(eventId, newStart, newEnd) {
+            fetch(`/api/events/move/${eventId}`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ start: newStart, end: newEnd })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Event moved:', data))
+            .catch(error => console.error('Error moving event:', error));
+        }
+        
+      }); 
+    </script>
+</body>
+</html>
