@@ -72,6 +72,25 @@
     color: #313131;
     height: 100%;
 }
+
+.event-vertical-line{
+    padding: 0 0px 0 6px !important;
+}
+ .event-vertical-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px; /* Width of the vertical line */
+    background-color: #a45db5; /* Color of the line */
+  }
+
+  .fc-event-break {
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxJa_Y_0YDv5IABnIU9Pkjm0fm56DbjXO5Ti1Srm9mgB5-OV-7TF0C3NocClpa_JNrf8w&usqp=CAU');
+    opacity: 0.7;
+}
+
   </style>
 </head>
 <body>
@@ -116,12 +135,14 @@
                   sendRemoveEventRequest(info.event.id);
               },
             eventMouseEnter: function(info) {
-                info.el.setAttribute('data-original-color', info.event.backgroundColor);
-                info.el.setAttribute('data-original-text-color', info.event.textColor || '#313131'); // Defaulting to black if no textColor is set
+                if (info.event.extendedProps.type === 'meeting') {
+                    info.el.setAttribute('data-original-color', info.event.backgroundColor);
+                    info.el.setAttribute('data-original-text-color', info.event.textColor || '#313131'); // Defaulting to black if no textColor is set
 
-                // Change the background color and text color
-                info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
-                info.event.setProp('textColor', 'white'); // Text color set to white
+                    // Change the background color and text color
+                    info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
+                    info.event.setProp('textColor', 'white'); // Text color set to white/ Use capturing phase to handle it first
+                }
             },
             eventMouseLeave: function(info) {
                 var originalColor = info.el.getAttribute('data-original-color');
@@ -182,6 +203,13 @@
           }
 
           function eventDidMount(arg) {
+
+            if (arg.event.extendedProps.type === 'break') {
+                arg.el.addEventListener('click', function(e) {
+                    e.stopPropagation();  // Prevents the click from being processed
+                }, true);  // Use capturing phase to handle it first
+            }
+
               if (arg.event.extendedProps.createdViaSelect) {
                   // Create a remove button only for events created via select
                   var closeButton = document.createElement('button');
@@ -210,7 +238,8 @@
           }
 
           function getEventContent(arg) {
-              if (arg.event.extendedProps.type === 'buffer') {
+            var type = arg.event.extendedProps.type;
+              if (type === 'buffer') {
                   // Return an empty div for buffer events to ensure no text is displayed
                   var bufferContent = document.createElement('div');
                   return {
@@ -263,6 +292,7 @@
                   content.appendChild(serviceName);
                   content.appendChild(title);
                   content.appendChild(timeRange);
+                  if(type === 'meeting')
                   content.appendChild(durationDisplay);
 
                   return {
@@ -279,7 +309,9 @@
                       start: '2024-07-14T14:00:00',
                       end: '2024-07-14T18:00:00',
                       color: '#dec3e4',
-                      serviceName: 'Service A'
+                      serviceName: 'Service A',
+                      classNames: 'event-vertical-line',
+                      type: 'meeting'
                   },
                   {
                       id: '2',
@@ -287,7 +319,9 @@
                       start: '2024-07-15T15:00:00',
                       end: '2024-07-15T19:00:00',
                       color: '#dec3e4',
-                      serviceName: 'Service B'
+                      serviceName: 'Service B',
+                      classNames: 'event-vertical-line',
+                      type: 'meeting'
                   },
                   {
                       id: '3',
@@ -295,23 +329,27 @@
                       start: '2024-07-16T13:00:00',
                       end: '2024-07-16T17:00:00',
                       color: '#dec3e4',
-                      serviceName: 'Service c'
+                      serviceName: 'Service c',
+                      classNames: 'event-vertical-line',
+                      type: 'meeting'
                   },
                   {
                      id: '4',
-                      title: 'Lunch Break',
-                      start: '2024-07-12T13:00:00',
-                      end: '2024-07-12T14:00:00',
-                      color: '#808080', // Gray color for breaks
-                      display: 'background' // Optionally, make it a background event
+                      title: 'Break',
+                      start: '2024-07-18T13:00:00',
+                      end: '2024-07-18T14:00:00',
+                      color: '#dec3e4',
+                      classNames : 'fc-event-break',
+                      type: 'break',
                   },
                   {
                       id: '5',
-                      title: 'Afternoon Break',
-                      start: '2024-07-14T16:00:00',
-                      end: '2024-07-14T16:30:00',
-                      color: '#808080',
-                      display: 'background'
+                      title: 'Break',
+                      start: '2024-07-19T16:00:00',
+                      end: '2024-07-19T17:30:00',
+                      color: '#dec3e4',
+                      classNames : 'fc-event-break',
+                      type: 'break'
                   },
                   {
                       id: '6',
@@ -319,6 +357,8 @@
                       start: '2024-07-17T10:00:00',
                       end: '2024-07-17T14:00:00',
                       color: '#dec3e4',
+                      classNames: 'event-vertical-line',
+                      type: 'meeting'
                   },
                   {
                       id: '7',
