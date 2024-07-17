@@ -94,7 +94,26 @@
 .fc-v-event{
     background-color: #bd89ca ;
 } 
+.top-buffer-time {
+    border: 2px solid #b97bc7;
+    background: none;
+    opacity: 1;    
+    margin: 0px 1px 0px 1px;
+    border-radius: 2px;
+    border-bottom: none;
+}
+.buttom-buffer-time {
+    border: 2px solid #b97bc7;
+    background: none;
+    opacity: 1;  
+    margin: 0px 1px 0px 1px;
+    border-radius: 2px;
+    border-top: none;
+}
 
+.no-resize-handle  {
+    display: none !important; /* Ensures that the resize handles are hidden */
+}
   </style>
 </head>
 <body>
@@ -148,6 +167,18 @@
                     info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
                     info.event.setProp('textColor', 'white'); // Text color set to white/ Use capturing phase to handle it first
                 }
+
+                if (info.event.extendedProps.type === 'buffer') {
+                // Listen for mouse enter to add the class
+                info.el.addEventListener('mouseenter', function() {
+                    info.el.classList.add('no-resize-handle');
+                });
+
+                // Listen for mouse leave to remove the class
+                info.el.addEventListener('mouseleave', function() {
+                    info.el.classList.remove('no-resize-handle');
+                });
+            }
             },
             eventMouseLeave: function(info) {
                 var originalColor = info.el.getAttribute('data-original-color');
@@ -181,20 +212,18 @@
                     title: 'Buffer',
                     start: new Date(event.start - 30 * 60000), // 30 minutes before
                     end: new Date(event.start),
-                    color: '#7b7a7a',
-                    display: 'background',
                     groupId: eventId,
-                    type : 'buffer'
+                    type : 'buffer',
+                    classNames: ['top-buffer-time'] 
                 });
                 calendar.addEvent({
                     id: postBufferId,
                     title: 'Buffer' ,
                     start: new Date(event.end),
                     end: new Date(event.end.getTime() + 30 * 60000), // 30 minutes after
-                    color: '#7b7a7a',
-                    display: 'background',
                     groupId: eventId,
-                    type : 'buffer'
+                    type : 'buffer',
+                    classNames: ['buttom-buffer-time'] 
                 });
             }
         }
@@ -216,7 +245,7 @@
               var event = {
                   title: title,
                   start: selectionInfo.start,
-                  end: selectionInfo.end,
+                  end: new Date(selectionInfo.end - 30 * 60000),
                   allDay: selectionInfo.allDay,
                   color: '#bd89ca',
                   createdViaSelect: true,
@@ -284,6 +313,19 @@
                   // Append the close button to the event element
                   arg.el.querySelector('.fc-event-main').appendChild(closeButton);
               }
+
+
+              if (arg.event.extendedProps.type === 'buffer') {
+                // Listen for mouse enter to add the class
+                arg.el.addEventListener('mouseenter', function() {
+                    arg.el.classList.add('no-resize-handle');
+                });
+
+                // Listen for mouse leave to remove the class
+                arg.el.addEventListener('mouseleave', function() {
+                    arg.el.classList.remove('no-resize-handle');
+                });
+            }
           }
 
           function getEventContent(arg) {
