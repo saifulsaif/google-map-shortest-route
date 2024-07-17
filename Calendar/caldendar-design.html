@@ -30,7 +30,7 @@
     .fc-event-resizer.fc-end-resizer {
       position: absolute;
       bottom: -5px;
-      left: -5px; /* Positioned on the bottom left of the event */
+      right: 0px; /* Positioned on the bottom left of the event */
     }
     .full-width-event .fc-event-main-frame {
         width: 100%; /* Ensures the event takes the full available width */
@@ -39,6 +39,39 @@
         width: 100% !important;  /* Ensuring it applies over FullCalendar's styles */
         max-width: 100% !important;  /* Override any max-width set by FullCalendar */
     }
+    /* Custom styles for FullCalendar's event resizing handles */
+.fc .fc-event-resizer {
+    background-color: #fff; /* Background color of the handle */
+    border: 2px solid #666; /* Border to make the handle more visible */
+    border-radius: 50%; /* Makes the handle round */
+    display: none; /* Hide by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.fc .fc-event:hover .fc-event-resizer {
+    display: flex; /* Show the handle when the event is hovered */
+}
+
+.fc .fc-event-resizer.fc-end-resizer {
+    right: 0; /* Position at the right end of the event */
+    top: 50%; /* Align vertically centered */
+    transform: translate(50%, -50%); /* Offset the handle to partly float outside */
+}
+
+.fc-v-event.fc-event-resizer {
+    right: 0px;
+}
+.fc-event-resizer{
+    right: 0px !important;
+    left:90% !important;
+}
+
+.fc-v-event .fc-event-main {
+    color: #313131;
+    height: 100%;
+}
   </style>
 </head>
 <body>
@@ -84,17 +117,25 @@
               },
             eventMouseEnter: function(info) {
                 info.el.setAttribute('data-original-color', info.event.backgroundColor);
-                info.event.setProp('backgroundColor', '#dec3e4');
+                info.el.setAttribute('data-original-text-color', info.event.textColor || '#313131'); // Defaulting to black if no textColor is set
+
+                // Change the background color and text color
+                info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
+                info.event.setProp('textColor', 'white'); // Text color set to white
             },
             eventMouseLeave: function(info) {
                 var originalColor = info.el.getAttribute('data-original-color');
+                var originalTextColor = info.el.getAttribute('data-original-text-color');
+
+                // Restore the original background color and text color
                 info.event.setProp('backgroundColor', originalColor);
+                info.event.setProp('textColor', originalTextColor);
             },
 
           });
 
           function clcikOnEvent(info) {
-              var newColor = '#9b6da8'; // Darker shade of the original color
+              var newColor = '#6c3079'; // Darker shade of the original color
               info.event.setProp('color', newColor); // Change the color of the event
           }
 
@@ -195,30 +236,33 @@
 
                   let timeRange = document.createElement('div');
                   timeRange.textContent = `${startTime} - ${endTime}`;
-                  timeRange.style.fontSize = '0.85em';
-                  timeRange.style.fontWeight = 'bold';
+                  timeRange.style.fontSize = '0.75em';
+                  timeRange.style.marginTop = '5px'
 
                   let title = document.createElement('div');
                   title.textContent = arg.event.title;
                   title.style.marginTop = '5px'; // Space between time and title
+                  title.style.fontWeight = 'bold';
 
                   let serviceName = document.createElement('div');
                   serviceName.textContent = arg.event.extendedProps.serviceName;
-                  serviceName.style.fontSize = '0.75em';
-                  serviceName.style.marginTop = '5px'; // Space between title and service
+                  serviceName.style.fontSize = '0.80em';
+                  serviceName.style.marginTop = '2px'; // Space between title and service
 
                   let durationDisplay = document.createElement('div');
                   durationDisplay.textContent = durationText;
                   durationDisplay.style.fontSize = '0.75em';
                   durationDisplay.style.position = 'absolute';
-                  durationDisplay.style.bottom = '0px'; // Positioned at the bottom of the container
+                  durationDisplay.style.bottom = '5px'; // Positioned at the bottom of the container
                   durationDisplay.style.width = '100%'; // Ensure it spans the full width
                   durationDisplay.style.textAlign = 'center'; // Center-align text
                   durationDisplay.style.fontWeight = 'bold';
 
-                  content.appendChild(timeRange);
-                  content.appendChild(title);
+                  
+                  
                   content.appendChild(serviceName);
+                  content.appendChild(title);
+                  content.appendChild(timeRange);
                   content.appendChild(durationDisplay);
 
                   return {
@@ -234,7 +278,7 @@
                       title: 'Event 1',
                       start: '2024-07-14T14:00:00',
                       end: '2024-07-14T18:00:00',
-                      color: '#bd89ca',
+                      color: '#dec3e4',
                       serviceName: 'Service A'
                   },
                   {
@@ -242,7 +286,7 @@
                       title: 'Event 2',
                       start: '2024-07-15T15:00:00',
                       end: '2024-07-15T19:00:00',
-                      color: '#bd89ca',
+                      color: '#dec3e4',
                       serviceName: 'Service B'
                   },
                   {
@@ -250,7 +294,7 @@
                       title: 'Testing',
                       start: '2024-07-16T13:00:00',
                       end: '2024-07-16T17:00:00',
-                      color: '#bd89ca',
+                      color: '#dec3e4',
                       serviceName: 'Service c'
                   },
                   {
@@ -274,7 +318,7 @@
                       title: 'Meeting with Client',
                       start: '2024-07-17T10:00:00',
                       end: '2024-07-17T14:00:00',
-                      color: '#bd89ca',
+                      color: '#dec3e4',
                   },
                   {
                       id: '7',
