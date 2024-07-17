@@ -92,7 +92,7 @@
 }
 
 .fc-v-event{
-    background-color: #bd89ca !important;
+    background-color: #bd89ca ;
 } 
 
   </style>
@@ -111,6 +111,7 @@
               selectable: true,
               selectMirror: true,
               eventResizableFromStart: true,
+              
               events: getEvents(), // all events show here
               eventContent: function(arg) {
                   return getEventContent(arg);
@@ -159,9 +160,52 @@
 
           });
 
+
+          function toggleBufferTimes(eventId) {
+            let event = calendar.getEventById(eventId);
+            if (!event) return;  // Exit if event not found
+
+            let preBufferId = eventId + '-pre';
+            let postBufferId = eventId + '-post';
+            let preBuffer = calendar.getEventById(preBufferId);
+            let postBuffer = calendar.getEventById(postBufferId);
+
+            // If buffers exist, remove them
+            if (preBuffer && postBuffer) {
+                preBuffer.remove();
+                postBuffer.remove();
+            } else {
+                // Add buffers if they don't exist
+                calendar.addEvent({
+                    id: preBufferId,
+                    title: 'Buffer',
+                    start: new Date(event.start - 30 * 60000), // 30 minutes before
+                    end: new Date(event.start),
+                    color: '#7b7a7a',
+                    display: 'background',
+                    groupId: eventId,
+                    type : 'buffer'
+                });
+                calendar.addEvent({
+                    id: postBufferId,
+                    title: 'Buffer' ,
+                    start: new Date(event.end),
+                    end: new Date(event.end.getTime() + 30 * 60000), // 30 minutes after
+                    color: '#7b7a7a',
+                    display: 'background',
+                    groupId: eventId,
+                    type : 'buffer'
+                });
+            }
+        }
+
+
+
+
           function clcikOnEvent(info) {
               var newColor = '#6c3079'; // Darker shade of the original color
               info.event.setProp('color', newColor); // Change the color of the event
+              toggleBufferTimes(info.event.id);
           }
 
 
@@ -297,7 +341,6 @@
                   content.appendChild(serviceName);
                   content.appendChild(title);
                   content.appendChild(timeRange);
-                  if(type === 'meeting')
                   content.appendChild(durationDisplay);
 
                   return {
@@ -364,24 +407,6 @@
                       color: '#dec3e4',
                       classNames: 'event-vertical-line',
                       type: 'meeting'
-                  },
-                  {
-                      id: '7',
-                      title: '',
-                      start: '2024-07-17T09:30:00',
-                      end: '2024-07-17T10:00:00',
-                      color: 'red', // Different color for buffer
-                      display: 'background',
-                      type: 'buffer'
-                  },
-                  {
-                      id: '8',
-                      title: '',
-                      start: '2024-07-17T14:00:00',
-                      end: '2024-07-17T14:30:00',
-                      color: 'red', // Different color for buffer
-                      display: 'background',
-                      type: 'buffer'
                   }
               ];
           }
