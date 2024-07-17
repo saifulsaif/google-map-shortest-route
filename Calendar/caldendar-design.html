@@ -35,6 +35,10 @@
     .full-width-event .fc-event-main-frame {
         width: 100%; /* Ensures the event takes the full available width */
     }
+    .fc .full-width-event, .fc .full-width-event .fc-event-main-frame {
+        width: 100% !important;  /* Ensuring it applies over FullCalendar's styles */
+        max-width: 100% !important;  /* Override any max-width set by FullCalendar */
+    }
   </style>
 </head>
 <body>
@@ -65,15 +69,13 @@
                   clcikOnEvent(info);
               },
               eventDragStart: function(info) {
-                  createTemporaryEvent(info);
-                  sendDragAndDropEventRequest(info.event.id, info.event.start.toISOString(), info.event.end.toISOString());
-
+                createTemporaryEvent(info)
               },
-              eventDragStop: function(info) {
-                  removeTemporaryEvent();
-              },
+            eventDrop: function(info) {
+                removeTemporaryEvent();
+            },
               eventResizeStart: function(info) {
-                  createTemporaryEvent(info);
+                createTemporaryEvent(info)
                   sendResizeEventRequest(info.event.id, info.event.start.toISOString(), info.event.end.toISOString());
               },
               eventResizeStop: function(info) {
@@ -116,22 +118,26 @@
           }
 
           function createTemporaryEvent(info) {
-              tempEvent = {
-                  id: 'temp', // Temporary ID
-                  title: info.event.title,
-                  start: info.event.start,
-                  end: info.event.end,
-                  color: 'rgba(189, 137, 202, 0.5)',
-                  className: 'full-width-event',
-              };
-              calendar.addEvent(tempEvent);
+                // Add a temporary event at the original position
+                calendar.addEvent({
+                id: 'temp', // Temporary ID
+                title: info.event.title,
+                start: info.event.start,
+                end: info.event.end,
+                color: 'rgba(189, 137, 202, 0.5)',
+                classNames: ['full-width-event'],
+                allDay: info.event.allDay
+            });
+            // Remove the original event from the display
+            info.event.remove();
           }
 
           function removeTemporaryEvent() {
-              let temp = calendar.getEventById('temp');
-              if (temp) {
-                  temp.remove();
-              }
+             // Remove the temporary event when the original event is dropped into a new position
+             let tempEvent = calendar.getEventById('temp');
+                if (tempEvent) {
+                    tempEvent.remove();
+                }
           }
 
           function eventDidMount(arg) {
