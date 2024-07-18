@@ -10,8 +10,8 @@
       font-family: Arial, sans-serif;
     }
     #calendar {
-      max-width: 1100px;
-      margin: 40px auto;
+      max-width: 100%;
+      margin: 0px auto;
     }
     .fc-event-resizer {
       border-radius: 50%; /* Make resize handles round */
@@ -114,23 +114,44 @@
 .no-resize-handle  {
     display: none !important; /* Ensures that the resize handles are hidden */
 }
+
+.fc-timegrid-event, .fc-daygrid-event {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center; /* Aligns content vertically center */
+    overflow: hidden; /* Keeps the content within the bounds of the event */
+    white-space: nowrap; /* Prevents text wrapping */
+}
+
+.fc-timegrid-event .fc-event-main, .fc-daygrid-event .fc-event-main {
+    flex: 1; /* Ensures the content fills the available space */
+}
+
+.fc .fc-timegrid-event-harness {
+    justify-content: start; /* Aligns events at the start of the time slot */
+}
+.fc-timegrid-day {
+    width: 20%; /* Adjust the width of each column to evenly distribute across the available space */
+}
+
   </style>
 </head>
 <body>
   <div id='calendar'></div>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
-  <script>
+    <script>
       document.addEventListener('DOMContentLoaded', function() {
           var calendarEl = document.getElementById('calendar');
           var eventCounter = 0;
           var calendar = new FullCalendar.Calendar(calendarEl, {
               initialView: 'timeGridWeek', // Set the initial view to weekly
+              hiddenDays: [0, 6], // Hides Sunday (0) and Saturday (6)
               editable: true, // Enable drag and drop
               droppable: true, // Allow external events to be dropped
               selectable: true,
               selectMirror: true,
               eventResizableFromStart: true,
-              
+
               events: getEvents(), // all events show here
               eventContent: function(arg) {
                   return getEventContent(arg);
@@ -145,88 +166,88 @@
                   clcikOnEvent(info);
               },
               eventDragStart: function(info) {
-                createTemporaryEvent(info)
+                  createTemporaryEvent(info)
               },
-            eventDrop: function(info) {
-                removeTemporaryEvent();
-            },
+              eventDrop: function(info) {
+                  removeTemporaryEvent();
+              },
               eventResizeStart: function(info) {
-                createTemporaryEvent(info)
+                  createTemporaryEvent(info)
                   sendResizeEventRequest(info.event.id, info.event.start.toISOString(), info.event.end.toISOString());
               },
               eventResizeStop: function(info) {
                   removeTemporaryEvent();
                   sendRemoveEventRequest(info.event.id);
               },
-            eventMouseEnter: function(info) {
-                if (info.event.extendedProps.type === 'meeting') {
-                    info.el.setAttribute('data-original-color', info.event.backgroundColor);
-                    info.el.setAttribute('data-original-text-color', info.event.textColor || '#313131'); // Defaulting to black if no textColor is set
+              eventMouseEnter: function(info) {
+                  if (info.event.extendedProps.type === 'meeting') {
+                      info.el.setAttribute('data-original-color', info.event.backgroundColor);
+                      info.el.setAttribute('data-original-text-color', info.event.textColor || '#313131'); // Defaulting to black if no textColor is set
 
-                    // Change the background color and text color
-                    info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
-                    info.event.setProp('textColor', 'white'); // Text color set to white/ Use capturing phase to handle it first
-                }
+                      // Change the background color and text color
+                      info.event.setProp('backgroundColor', '#bd89ca'); // Example: light purple background
+                      info.event.setProp('textColor', 'white'); // Text color set to white/ Use capturing phase to handle it first
+                  }
 
-                if (info.event.extendedProps.type === 'buffer') {
-                // Listen for mouse enter to add the class
-                info.el.addEventListener('mouseenter', function() {
-                    info.el.classList.add('no-resize-handle');
-                });
+                  if (info.event.extendedProps.type === 'buffer') {
+                      // Listen for mouse enter to add the class
+                      info.el.addEventListener('mouseenter', function() {
+                          info.el.classList.add('no-resize-handle');
+                      });
 
-                // Listen for mouse leave to remove the class
-                info.el.addEventListener('mouseleave', function() {
-                    info.el.classList.remove('no-resize-handle');
-                });
-            }
-            },
-            eventMouseLeave: function(info) {
-                var originalColor = info.el.getAttribute('data-original-color');
-                var originalTextColor = info.el.getAttribute('data-original-text-color');
+                      // Listen for mouse leave to remove the class
+                      info.el.addEventListener('mouseleave', function() {
+                          info.el.classList.remove('no-resize-handle');
+                      });
+                  }
+              },
+              eventMouseLeave: function(info) {
+                  var originalColor = info.el.getAttribute('data-original-color');
+                  var originalTextColor = info.el.getAttribute('data-original-text-color');
 
-                // Restore the original background color and text color
-                info.event.setProp('backgroundColor', originalColor);
-                info.event.setProp('textColor', originalTextColor);
-            },
+                  // Restore the original background color and text color
+                  info.event.setProp('backgroundColor', originalColor);
+                  info.event.setProp('textColor', originalTextColor);
+              },
 
           });
 
 
           function toggleBufferTimes(eventId) {
-            let event = calendar.getEventById(eventId);
-            if (!event) return;  // Exit if event not found
+              let event = calendar.getEventById(eventId);
+              if (!event) return; // Exit if event not found
 
-            let preBufferId = eventId + '-pre';
-            let postBufferId = eventId + '-post';
-            let preBuffer = calendar.getEventById(preBufferId);
-            let postBuffer = calendar.getEventById(postBufferId);
+              let preBufferId = eventId + '-pre';
+              let postBufferId = eventId + '-post';
+              let preBuffer = calendar.getEventById(preBufferId);
+              let postBuffer = calendar.getEventById(postBufferId);
 
-            // If buffers exist, remove them
-            if (preBuffer && postBuffer) {
-                preBuffer.remove();
-                postBuffer.remove();
-            } else {
-                // Add buffers if they don't exist
-                calendar.addEvent({
-                    id: preBufferId,
-                    title: 'Buffer',
-                    start: new Date(event.start - 30 * 60000), // 30 minutes before
-                    end: new Date(event.start),
-                    groupId: eventId,
-                    type : 'buffer',
-                    classNames: ['top-buffer-time'] 
-                });
-                calendar.addEvent({
-                    id: postBufferId,
-                    title: 'Buffer' ,
-                    start: new Date(event.end),
-                    end: new Date(event.end.getTime() + 30 * 60000), // 30 minutes after
-                    groupId: eventId,
-                    type : 'buffer',
-                    classNames: ['buttom-buffer-time'] 
-                });
-            }
-        }
+              // If buffers exist, remove them
+              if (preBuffer && postBuffer) {
+                  preBuffer.remove();
+                  postBuffer.remove();
+              } else {
+                  // Add buffers if they don't exist
+                  calendar.addEvent({
+                      id: preBufferId,
+                      title: 'Buffer',
+                      start: new Date(event.start - 30 * 60000), // 30 minutes before
+                      end: new Date(event.start),
+                      groupId: eventId,
+                      type: 'buffer',
+                      classNames: ['top-buffer-time']
+                  });
+                  calendar.addEvent({
+                      id: postBufferId,
+                      title: 'Buffer',
+                      start: new Date(event.end),
+                      end: new Date(event.end.getTime() + 30 * 60000), // 30 minutes after
+                      groupId: eventId,
+                      type: 'buffer',
+                      classNames: ['buttom-buffer-time']
+                  });
+              }
+          }
 
 
 
@@ -239,54 +260,63 @@
 
 
           function MouseClickAddEvents(selectionInfo, calendar) {
-              eventCounter++; // Increment the counter each time an event is created
-              var title = 'title-' + eventCounter; // Generate title in the format 'title-X'
+            eventCounter++; // Increment the counter each time an event is created
+            var title = 'title-' + eventCounter; // Generate title in the format 'title-X'
 
-              var event = {
-                  title: title,
-                  start: selectionInfo.start,
-                  end: new Date(selectionInfo.end - 30 * 60000),
-                  allDay: selectionInfo.allDay,
-                  color: '#bd89ca',
-                  createdViaSelect: true,
-              }
+            // Ensure a minimum duration of 60 minutes for the event
+            var startTime = selectionInfo.start;
+            var endTime = selectionInfo.end;
+            var duration = endTime - startTime; // Duration in milliseconds
 
+            if (duration < 3600000) { // 3600000 milliseconds = 60 minutes
+                endTime = new Date(startTime.getTime() + 3600000); // Set end time to start time + 60 minutes
+            }
 
-              calendar.addEvent(event);
-              calendar.unselect(); // Clear selection after event is added
-              sendCreateEventRequest(event);
-          }
+            var event = {
+                title: title,
+                start: startTime,
+                end: endTime,
+                allDay: selectionInfo.allDay,
+                color: '#bd89ca',
+                createdViaSelect: true,
+            }
+
+            calendar.addEvent(event);
+            calendar.unselect(); // Clear selection after event is added
+            sendCreateEventRequest(event); // Send event data to server
+        }
+
 
           function createTemporaryEvent(info) {
-                // Add a temporary event at the original position
-                calendar.addEvent({
-                id: 'temp', // Temporary ID
-                title: info.event.title,
-                start: info.event.start,
-                end: info.event.end,
-                color: 'rgba(189, 137, 202, 0.5)',
-                classNames: (info.event.extendedProps.type === 'meeting') ? ['full-width-event'] : ['fc-event-break'],
-                allDay: info.event.allDay
-            });
-            // Remove the original event from the display
-            info.event.remove();
+              // Add a temporary event at the original position
+              calendar.addEvent({
+                  id: 'temp', // Temporary ID
+                  title: info.event.title,
+                  start: info.event.start,
+                  end: info.event.end,
+                  color: 'rgba(189, 137, 202, 0.5)',
+                  classNames: (info.event.extendedProps.type === 'meeting') ? ['full-width-event'] : ['fc-event-break'],
+                  allDay: info.event.allDay
+              });
+              // Remove the original event from the display
+              info.event.remove();
           }
 
           function removeTemporaryEvent() {
-             // Remove the temporary event when the original event is dropped into a new position
-             let tempEvent = calendar.getEventById('temp');
-                if (tempEvent) {
-                    tempEvent.remove();
-                }
+              // Remove the temporary event when the original event is dropped into a new position
+              let tempEvent = calendar.getEventById('temp');
+              if (tempEvent) {
+                  tempEvent.remove();
+              }
           }
 
           function eventDidMount(arg) {
 
-            if (arg.event.extendedProps.type === 'break') {
-                arg.el.addEventListener('click', function(e) {
-                    e.stopPropagation();  // Prevents the click from being processed
-                }, true);  // Use capturing phase to handle it first
-            }
+              if (arg.event.extendedProps.type === 'break') {
+                  arg.el.addEventListener('click', function(e) {
+                      e.stopPropagation(); // Prevents the click from being processed
+                  }, true); // Use capturing phase to handle it first
+              }
 
               if (arg.event.extendedProps.createdViaSelect) {
                   // Create a remove button only for events created via select
@@ -315,7 +345,7 @@
               }
 
 
-              if (arg.event.extendedProps.type === 'buffer') {
+            if (arg.event.extendedProps.type === 'buffer') {
                 // Listen for mouse enter to add the class
                 arg.el.addEventListener('mouseenter', function() {
                     arg.el.classList.add('no-resize-handle');
@@ -326,10 +356,11 @@
                     arg.el.classList.remove('no-resize-handle');
                 });
             }
+            
           }
 
           function getEventContent(arg) {
-            var type = arg.event.extendedProps.type;
+              var type = arg.event.extendedProps.type;
               if (type === 'buffer') {
                   // Return an empty div for buffer events to ensure no text is displayed
                   var bufferContent = document.createElement('div');
@@ -378,8 +409,8 @@
                   durationDisplay.style.textAlign = 'center'; // Center-align text
                   durationDisplay.style.fontWeight = 'bold';
 
-                  
-                  
+
+
                   content.appendChild(serviceName);
                   content.appendChild(title);
                   content.appendChild(timeRange);
@@ -424,12 +455,12 @@
                       type: 'meeting'
                   },
                   {
-                     id: '4',
+                      id: '4',
                       title: 'Break',
                       start: '2024-07-18T13:00:00',
                       end: '2024-07-18T14:00:00',
                       color: '#dec3e4',
-                      classNames : 'fc-event-break',
+                      classNames: 'fc-event-break',
                       type: 'break',
                   },
                   {
@@ -438,7 +469,7 @@
                       start: '2024-07-19T16:00:00',
                       end: '2024-07-19T17:30:00',
                       color: '#dec3e4',
-                      classNames : 'fc-event-break',
+                      classNames: 'fc-event-break',
                       type: 'break'
                   },
                   {
@@ -455,54 +486,60 @@
 
           calendar.render();
 
-        function sendCreateEventRequest(eventData) {
-            fetch('/api/events/create', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(eventData)
-            })
-            .then(response => response.json())
-            .then(data => console.log('Event created:', data))
-            .catch(error => console.error('Error creating event:', error));
-        }
+          function sendCreateEventRequest(eventData) {
+              fetch('/api/events/create', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(eventData)
+                  })
+                  .then(response => response.json())
+                  .then(data => console.log('Event created:', data))
+                  .catch(error => console.error('Error creating event:', error));
+          }
 
-        function sendResizeEventRequest(eventId, newStart, newEnd) {
-            fetch(`/api/events/resize/${eventId}`, {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ start: newStart, end: newEnd })
-            })
-            .then(response => response.json())
-            .then(data => console.log('Event resized:', data))
-            .catch(error => console.error('Error resizing event:', error));
-        }
+          function sendResizeEventRequest(eventId, newStart, newEnd) {
+              fetch(`/api/events/resize/${eventId}`, {
+                      method: 'PUT',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          start: newStart,
+                          end: newEnd
+                      })
+                  })
+                  .then(response => response.json())
+                  .then(data => console.log('Event resized:', data))
+                  .catch(error => console.error('Error resizing event:', error));
+          }
 
-        function sendRemoveEventRequest(eventId) {
-            fetch(`/api/events/remove/${eventId}`, {
-                method: 'DELETE'
-            })
-            .then(response => response.json())
-            .then(data => console.log('Event removed:', data))
-            .catch(error => console.error('Error removing event:', error));
-        }
+          function sendRemoveEventRequest(eventId) {
+              fetch(`/api/events/remove/${eventId}`, {
+                      method: 'DELETE'
+                  })
+                  .then(response => response.json())
+                  .then(data => console.log('Event removed:', data))
+                  .catch(error => console.error('Error removing event:', error));
+          }
 
-        function sendDragAndDropEventRequest(eventId, newStart, newEnd) {
-            fetch(`/api/events/move/${eventId}`, {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ start: newStart, end: newEnd })
-            })
-            .then(response => response.json())
-            .then(data => console.log('Event moved:', data))
-            .catch(error => console.error('Error moving event:', error));
-        }
-        
+          function sendDragAndDropEventRequest(eventId, newStart, newEnd) {
+              fetch(`/api/events/move/${eventId}`, {
+                      method: 'PUT',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          start: newStart,
+                          end: newEnd
+                      })
+                  })
+                  .then(response => response.json())
+                  .then(data => console.log('Event moved:', data))
+                  .catch(error => console.error('Error moving event:', error));
+          }
+
       }); 
     </script>
 </body>
