@@ -114,24 +114,8 @@
 .no-resize-handle  {
     display: none !important; /* Ensures that the resize handles are hidden */
 }
-
-.fc-timegrid-event, .fc-daygrid-event {
-    display: inline-flex !important;
-    flex-direction: row !important;
-    align-items: center; /* Aligns content vertically center */
-    overflow: hidden; /* Keeps the content within the bounds of the event */
-    white-space: nowrap; /* Prevents text wrapping */
-}
-
-.fc-timegrid-event .fc-event-main, .fc-daygrid-event .fc-event-main {
-    flex: 1; /* Ensures the content fills the available space */
-}
-
-.fc .fc-timegrid-event-harness {
-    justify-content: start; /* Aligns events at the start of the time slot */
-}
-.fc-timegrid-day {
-    width: 20%; /* Adjust the width of each column to evenly distribute across the available space */
+.fc-direction-ltr .fc-timegrid-col-events {
+    margin: 0px -0.5% 0px 0px !important;
 }
 
   </style>
@@ -151,7 +135,7 @@
               selectable: true,
               selectMirror: true,
               eventResizableFromStart: true,
-
+              slotEventOverlap:false,
               events: getEvents(), // all events show here
               eventContent: function(arg) {
                   return getEventContent(arg);
