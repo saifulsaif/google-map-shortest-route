@@ -12,6 +12,7 @@
     #calendar {
       max-width: 100%;
       margin: 0px auto;
+      height: 100vh;
     }
     .fc-event-resizer {
       border-radius: 50%; /* Make resize handles round */
@@ -128,6 +129,7 @@
           var calendarEl = document.getElementById('calendar');
           var eventCounter = 0;
           var calendar = new FullCalendar.Calendar(calendarEl, {
+            nowIndicator: true,
               initialView: 'timeGridWeek', // Set the initial view to weekly
               hiddenDays: [0, 6], // Hides Sunday (0) and Saturday (6)
               editable: true, // Enable drag and drop
@@ -290,7 +292,7 @@
               // Remove the temporary event when the original event is dropped into a new position
               let tempEvent = calendar.getEventById('temp');
               if (tempEvent) {
-                  tempEvent.remove();
+                //   tempEvent.remove();
               }
           }
 
@@ -407,12 +409,12 @@
           }
 
           function getEvents() {
-              return [ // Define demo events
+            return [ // Define demo events
                   {
                       id: '1',
                       title: 'Event 1',
-                      start: '2024-07-14T14:00:00',
-                      end: '2024-07-14T18:00:00',
+                      start: '2024-07-24T14:00:00',
+                      end: '2024-07-24T18:00:00',
                       color: '#dec3e4',
                       serviceName: 'Service A',
                       classNames: 'event-vertical-line',
@@ -421,8 +423,8 @@
                   {
                       id: '2',
                       title: 'Event 2',
-                      start: '2024-07-15T15:00:00',
-                      end: '2024-07-15T19:00:00',
+                      start: '2024-07-25T15:00:00',
+                      end: '2024-07-25T19:00:00',
                       color: '#dec3e4',
                       serviceName: 'Service B',
                       classNames: 'event-vertical-line',
@@ -431,8 +433,8 @@
                   {
                       id: '3',
                       title: 'Testing',
-                      start: '2024-07-16T13:00:00',
-                      end: '2024-07-16T17:00:00',
+                      start: '2024-07-26T13:00:00',
+                      end: '2024-07-26T17:00:00',
                       color: '#dec3e4',
                       serviceName: 'Service c',
                       classNames: 'event-vertical-line',
@@ -441,8 +443,8 @@
                   {
                       id: '4',
                       title: 'Break',
-                      start: '2024-07-18T13:00:00',
-                      end: '2024-07-18T14:00:00',
+                      start: '2024-07-28T13:00:00',
+                      end: '2024-07-28T14:00:00',
                       color: '#dec3e4',
                       classNames: 'fc-event-break',
                       type: 'break',
@@ -450,8 +452,8 @@
                   {
                       id: '5',
                       title: 'Break',
-                      start: '2024-07-19T16:00:00',
-                      end: '2024-07-19T17:30:00',
+                      start: '2024-07-26T16:00:00',
+                      end: '2024-07-26T17:30:00',
                       color: '#dec3e4',
                       classNames: 'fc-event-break',
                       type: 'break'
@@ -459,8 +461,8 @@
                   {
                       id: '6',
                       title: 'Meeting with Client',
-                      start: '2024-07-17T10:00:00',
-                      end: '2024-07-17T14:00:00',
+                      start: '2024-07-27T10:00:00',
+                      end: '2024-07-27T14:00:00',
                       color: '#dec3e4',
                       classNames: 'event-vertical-line',
                       type: 'meeting'
