@@ -17,7 +17,7 @@
     .fc-event-resizer {
       border-radius: 50%; /* Make resize handles round */
       background-color: #fff; /* White color icons */
-      border: 2px solid #666; /* Border to make it more visible */
+      border: 2px solid #8208a1; /* Border to make it more visible */
       width: 10px;
       height: 10px;
       display: block; /* Ensure they are always visible */
@@ -43,7 +43,7 @@
     /* Custom styles for FullCalendar's event resizing handles */
 .fc .fc-event-resizer {
     background-color: #fff; /* Background color of the handle */
-    border: 2px solid #666; /* Border to make the handle more visible */
+    border: 2px solid #8208a1; /* Border to make the handle more visible */
     border-radius: 50%; /* Makes the handle round */
     display: none; /* Hide by default */
     align-items: center;
@@ -64,10 +64,15 @@
 .fc-v-event.fc-event-resizer {
     right: 0px;
 }
-.fc-event-resizer{
-    right: 0px !important;
+
+.fc-event-resizer-start{
     left:90% !important;
 }
+
+.fc-event-resizer-end{
+    left:5% !important;
+}
+
 
 .fc-v-event .fc-event-main {
     color: #313131;
@@ -138,6 +143,7 @@
               selectMirror: true,
               eventResizableFromStart: true,
               slotEventOverlap:false,
+              allDaySlot : false,
               events: getEvents(), // all events show here
               eventContent: function(arg) {
                   return getEventContent(arg);
@@ -292,7 +298,7 @@
               // Remove the temporary event when the original event is dropped into a new position
               let tempEvent = calendar.getEventById('temp');
               if (tempEvent) {
-                //   tempEvent.remove();
+                  tempEvent.remove();
               }
           }
 
