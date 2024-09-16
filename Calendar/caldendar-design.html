@@ -17,7 +17,7 @@
     .fc-event-resizer {
       border-radius: 50%; /* Make resize handles round */
       background-color: #fff; /* White color icons */
-      border: 2px solid #8208a1; /* Border to make it more visible */
+      border: 1px solid #8208a1; /* Border to make it more visible */
       width: 10px;
       height: 10px;
       display: block; /* Ensure they are always visible */
@@ -88,8 +88,8 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 3px; /* Width of the vertical line */
-    background-color: #a45db5; /* Color of the line */
+    width: 3px; 
+    background-color: #a45db5; 
   }
 
   .fc-event-break {
@@ -196,8 +196,6 @@
               eventMouseLeave: function(info) {
                   var originalColor = info.el.getAttribute('data-original-color');
                   var originalTextColor = info.el.getAttribute('data-original-text-color');
-
-                  // Restore the original background color and text color
                   info.event.setProp('backgroundColor', originalColor);
                   info.event.setProp('textColor', originalTextColor);
               },

@@ -73,7 +73,14 @@
         </select>
         <!-- <button class="button" onclick="filterMarkers()">Filter</button> -->
     </div>
-    <div id="map"></div>
+    <div id="map" style="width: 70%; height: 100vh; float: left;"></div>
+    <div style="width: 25%; height: 100vh; float: right; overflow-y: scroll; background-color: #f4f4f4; padding: 20px;">
+        <h3>Location List</h3>
+        <hr>
+        <div  id="list">
+
+        </div>
+    </div>
     <script>
         let map;
         let markers = [];
@@ -90,7 +97,7 @@
         "category": "Country / Roots/ Blues",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n       <h4>James Cooke</h4>\n        <h5>Tandem Jump (new.. band members from The Give)</h5>\n             <p>Songs for listeners who like to think</p>\n                    <p>Address: 54 Maple Street, Shelburne Falls MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://www.captcmusic.com/\">More Info</a>\n                </div>"
+        "content": "<div>\n       <h4>James Cooke</h4>\n                    <p>Songs for listeners who like to think</p>\n                    <p>Address: 54 Maple Street, Shelburne Falls MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://www.captcmusic.com/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -103,7 +110,7 @@
         "category": "Folk/Acoustic",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n                    <h4>Lily Soleil</h4>\n    <h5> Trophy Husband MA </h5>\n                 <p>Soulful folk pop singer-songwriter</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.lilysoleilmusic.com/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Lily Soleil</h4>\n              <p>Soulful folk pop singer-songwriter</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.lilysoleilmusic.com/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -116,7 +123,7 @@
         "category": "Experimental/Improv/Originals",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n                    <h4>Tandem Jump (from The Give)</h4>\n          <h5>  Eric & the Wildfire </h5>\n           <p>Melodic, quirky, originals and covers</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://thegivemusic.com//?\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Tandem Jump (from The Give)</h4>\n                <p>Melodic, quirky, originals and covers</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://thegivemusic.com//?\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -129,7 +136,7 @@
         "category": "Folk/Acoustic",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n                    <h4>Dave Dersham</h4>\n          <h5>  Survey Says </h5>\n           <p>Contemporary Acoustic Folk</p>\n                    <p>Address: 40 Mechanic Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.davedershammusic.com/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Dave Dersham</h4>\n                <p>Contemporary Acoustic Folk</p>\n                    <p>Address: 40 Mechanic Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.davedershammusic.com/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -142,7 +149,7 @@
         "category": "Folk/Acoustic",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n                    <h4>Chris Goudreau</h4>\n           <h5>  Sisters of the Circle </h5>\n           <p>Powerhouse vocals, folk-rock guitar</p>\n                    <p>Address: 4 Deerfield Ave, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://chrisgoudreau12string.bandcamp.com/album/apocalyptic-love-songs/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Chris Goudreau</h4>\n           <p>Powerhouse vocals, folk-rock guitar</p>\n                    <p>Address: 4 Deerfield Ave, Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://chrisgoudreau12string.bandcamp.com/album/apocalyptic-love-songs/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -155,7 +162,7 @@
         "category": "Children of all ages",
         "time": '11:00',
         "time_con": "11:00 AM",
-        "content": "<div>\n                    <h4>Paul Bennett Comedy</h4>\n           <h5>  Brookside Project </h5>\n           <p>Jokes for\" \"Kids of ages\"</p>\n                    <p>Address: 99 Main Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Children of all ages</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Paul Bennett Comedy</h4>\n           <p>Jokes for\" \"Kids of ages\"</p>\n                    <p>Address: 99 Main Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 11:00 AM</p>\n                    <p>Category: Children of all ages</p>\n                                </div>"
     },
     {
         "coords": {
@@ -168,20 +175,7 @@
         "category": "Children of all ages",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>the Popsicles (Lynn and Danny)</h4>\n           <h5> Soular Eclipse  </h5>\n           <p>Sing along with favorites kid songs</p>\n                    <p>Address: 127 Main Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                     <p>Category: Children of all ages</p>\n                               </div>"
-    },
-    {
-        "coords": {
-            "lat": 42.603735,
-            "lng": -72.7399144
-        },
-        "type": "festival",
-        "name": "Positive Negative Man",
-        "address": "8 Bridge Street Shelburne Falls, MA 01370",
-        "category": "Experimental/Improv/Originals",
-        "time": "Noon",
-        "time_con": "Noon",
-        "content": "<div>\n                    <h4>Positive Negative Man</h4>\n           <h5>  Orlen, Gabriel & Avery </h5>\n           <p>Lyricist, guitar and beat master</p>\n                    <p>Address: 8 Bridge Street Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                  <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://positivenegativeman.bandcamp.com/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>the Popsicles (Lynn and Danny)</h4>\n            <p>Sing along with favorites kid songs</p>\n                    <p>Address: 127 Main Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                     <p>Category: Children of all ages</p>\n                               </div>"
     },
     {
         "coords": {
@@ -194,7 +188,7 @@
         "category": "Fiddles and more",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>Michael Nix</h4>\n           <h5> Bear Jam  </h5>\n           <p>New Classic Banjo</p>\n                    <p>Address: 34 Main Street Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                      <p>Category: Fiddles and more</p>\n                  <a href=\"https://michaelnixmusic.com/\">More Info</a>\n                    </div>"
+        "content": "<div>\n                    <h4>Michael Nix</h4>\n              <p>New Classic Banjo</p>\n                    <p>Address: 34 Main Street Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                      <p>Category: Fiddles and more</p>\n                  <a href=\"https://michaelnixmusic.com/\">More Info</a>\n                    </div>"
     },
     {
         "coords": {
@@ -207,7 +201,7 @@
         "category": "Folk/Acoustic",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>carly lara</h4>\n           <h5>  Lily Soleil </h5>\n           <p>Indie/Folk aimed to pull heartstrings</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                 <p>Time: Noon</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.linktr.ee/carlylara/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>carly lara</h4>\n                 <p>Indie/Folk aimed to pull heartstrings</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                 <p>Time: Noon</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.linktr.ee/carlylara/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -220,7 +214,7 @@
         "category": "Folk/Acoustic",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>Morgan Kelsey</h4>\n           <h5>  Forest Avenue </h5>\n           <p>Playing piano and guitar at home</p>\n                    <p>Address: 30 High Street, Shelburne Falls MA 01370</p>\n                     <p>Time: Noon</p>\n                   <p>Category: Folk/Acoustic</p>\n                                  </div>"
+        "content": "<div>\n                    <h4>Morgan Kelsey</h4>\n                <p>Playing piano and guitar at home</p>\n                    <p>Address: 30 High Street, Shelburne Falls MA 01370</p>\n                     <p>Time: Noon</p>\n                   <p>Category: Folk/Acoustic</p>\n                                  </div>"
     },
     {
         "coords": {
@@ -233,7 +227,7 @@
         "category": "Folk/Acoustic",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>Brookside Project</h4>\n           <h5> carly lara  </h5>\n           <p>Original Americana tunes</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                       <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.facebook.com/search/top?q=roland%20lapierre%20music/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Brookside Project</h4>\n                <p>Original Americana tunes</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                       <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://www.facebook.com/search/top?q=roland%20lapierre%20music/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -246,7 +240,7 @@
         "category": "Fiddles and more",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>One Part Luck</h4>\n           <h5>  Four Gong Confucius </h5>\n           <p>Original songs, strings, 2 part harmony</p>\n                    <p>Address: 21 Maple Shelburne Falls, MA 01370</p>\n                     <p>Time: Noon</p>\n                       <p>Category: Fiddles and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>One Part Luck</h4>\n                 <p>Original songs, strings, 2 part harmony</p>\n                    <p>Address: 21 Maple Shelburne Falls, MA 01370</p>\n                     <p>Time: Noon</p>\n                       <p>Category: Fiddles and more</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -259,7 +253,7 @@
         "category": "Country / Roots/ Blues",
         "time": "Noon",
         "time_con": "Noon",
-        "content": "<div>\n                    <h4>Harry Remer</h4>\n           <h5> Old-Time Music Jam </h5>\n           <p>Roots-influenced singer-songwriter</p>\n                    <p>Address: 22 Mechanic St, Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://harryremermusic.com/music/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Harry Remer</h4>\n                  <p>Roots-influenced singer-songwriter</p>\n                    <p>Address: 22 Mechanic St, Shelburne Falls, MA 01370</p>\n                    <p>Time: Noon</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://harryremermusic.com/music/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -272,7 +266,7 @@
         "category": "Poetry/Spoken Word/Comedy",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Poets Martin Espada and Lauren Schmidt</h4>\n           <h5>  Sher Levesqu </h5>\n           <p>Poetry, moving and political</p>\n                    <p>Address: 105 Main Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                         <p>Category: Poetry/Spoken Word/Comedy</p>\n                                    </div>"
+        "content": "<div>\n                    <h4>Poets Martin Espada and Lauren Schmidt</h4>\n            <p>Poetry, moving and political</p>\n                    <p>Address: 105 Main Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                         <p>Category: Poetry/Spoken Word/Comedy</p>\n                                    </div>"
     },
     {
         "coords": {
@@ -285,7 +279,7 @@
         "category": "Country / Roots/ Blues",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>The Riverbenders & Special Guests</h4>\n           <h5> Lou Marie  </h5>\n           <p>Country music</p>\n                    <p>Address: 45 Water Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                        <p>Category: Country / Roots/ Blues</p>\n                               </div>"
+        "content": "<div>\n                    <h4>The Riverbenders & Special Guests</h4>\n               <p>Country music</p>\n                    <p>Address: 45 Water Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                        <p>Category: Country / Roots/ Blues</p>\n                               </div>"
     },
     {
         "coords": {
@@ -298,7 +292,7 @@
         "category": "Country / Roots/ Blues",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>The Farley String Band</h4>\n           <h5>  Aaron Bilodeau </h5>\n           <p>Old time fiddle tunes, jigs and reels</p>\n                    <p>Address: 12 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                         <p>Category: Country / Roots/ Blues</p>\n                                </div>"
+        "content": "<div>\n                    <h4>The Farley String Band</h4>\n                <p>Old time fiddle tunes, jigs and reels</p>\n                    <p>Address: 12 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                         <p>Category: Country / Roots/ Blues</p>\n                                </div>"
     },
     {
         "coords": {
@@ -311,12 +305,12 @@
         "category": "Folk/Acoustic",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Orlen, Gabriel & Avery</h4>\n           <h5> Positive Negative Man  </h5>\n           <p>Folk-Americana</p>\n                    <p>Address: 17 Severance Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                         <p>Category: Folk/Acoustic</p>\n                              </div>"
+        "content": "<div>\n                    <h4>Orlen, Gabriel & Avery</h4>\n                <p>Folk-Americana</p>\n                    <p>Address: 17 Severance Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                         <p>Category: Folk/Acoustic</p>\n                              </div>"
     },
     {
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.60104312860066,
+            "lng": -72.7377079587735
         },
         "type": "festival",
         "name": "Eric & the Wildfire",
@@ -324,7 +318,7 @@
         "category": "Rock/Pop",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Eric & the Wildfire</h4>\n           <h5>  Eric & the Wildfire </h5>\n           <p>Rock and roll hits cover band</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                        <p>Category: Rock/Pop</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Eric & the Wildfire</h4>\n             <p>Rock and roll hits cover band</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                        <p>Category: Rock/Pop</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -337,7 +331,7 @@
         "category": "Country / Roots/ Blues",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Wild Bill and Friends</h4>\n           <h5>  Hana Zara </h5>\n           <p>Country, bluegrass, roots </p>\n                    <p>Address: 38 Mechanic Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                        <p>Category: Country / Roots/ Blues</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Wild Bill and Friends</h4>\n                 <p>Country, bluegrass, roots </p>\n                    <p>Address: 38 Mechanic Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 01:00 PM</p>\n                        <p>Category: Country / Roots/ Blues</p>\n                                </div>"
     },
     {
         "coords": {
@@ -350,7 +344,7 @@
         "category": "Folk/Acoustic",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Lou Marie</h4>\n           <h5>  he Frost Heaves & Hales </h5>\n           <p>Librarian with contemporary folk songs</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                        <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://lou-marie.bandcamp.com/album/h-a-unted/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Lou Marie</h4>\n           <p>Librarian with contemporary folk songs</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                        <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://lou-marie.bandcamp.com/album/h-a-unted/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -363,7 +357,7 @@
         "category": "Folk/Acoustic",
         "time": "01:00",
         "time_con": "01:00 PM",
-        "content": "<div>\n                    <h4>Lisa Pontoppidan</h4>\n           <h5>   Lisa Pontoppidan</h5>\n           <p>Heartfelt songs on guitar</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Lisa Pontoppidan</h4>\n             <p>Heartfelt songs on guitar</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 01:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                                </div>"
     },
     {
         "coords": {
@@ -376,7 +370,7 @@
         "category": "Folk/Acoustic",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Joanie Schwartz</h4>\n           <h5>   OverEasy Jazz</h5>\n           <p>Blues, blue grass, folk, sing alongs</p>\n                    <p>Address: 22 Monroe Shelburne Falls, MA 01370</p>\n                    <p>Time: 02:00 PM</p>\n                  <p>Category: Folk/Acoustic</p>\n                              </div>"
+        "content": "<div>\n                    <h4>Joanie Schwartz</h4>\n                 <p>Blues, blue grass, folk, sing alongs</p>\n                    <p>Address: 22 Monroe Shelburne Falls, MA 01370</p>\n                    <p>Time: 02:00 PM</p>\n                  <p>Category: Folk/Acoustic</p>\n                              </div>"
     },
     {
         "coords": {
@@ -389,7 +383,7 @@
         "category": "Poetry/Spoken Word/Comedy",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Poets Abbot Cutler and Paul Mariani</h4>\n           <h5>John Yannis   </h5>\n           <p>Poetry, contemplative and spiritual</p>\n                    <p>Address: 105 Main Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 02:00 PM</p>\n                   <p>Category: Poetry/Spoken Word/Comedy</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Poets Abbot Cutler and Paul Mariani</h4>\n               <p>Poetry, contemplative and spiritual</p>\n                    <p>Address: 105 Main Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 02:00 PM</p>\n                   <p>Category: Poetry/Spoken Word/Comedy</p>\n                                </div>"
     },
     {
         "coords": {
@@ -402,7 +396,7 @@
         "category": "Jazz/Blues",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>OverEasy Jazz</h4>\n           <h5>  Harry Remer </h5>\n           <p>1920's & 30's New Orleans Jazz music</p>\n                    <p>Address:  1 Ashfield St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 02:00 PM</p>\n                      <p>Category: Jazz/Blues</p>\n                    <a href=\"https://www.OverEasyJazz.wixsite.com/jazz/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>OverEasy Jazz</h4>\n              <p>1920's & 30's New Orleans Jazz music</p>\n                    <p>Address:  1 Ashfield St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 02:00 PM</p>\n                      <p>Category: Jazz/Blues</p>\n                    <a href=\"https://www.OverEasyJazz.wixsite.com/jazz/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -415,7 +409,7 @@
         "category": "Country / Roots/ Blues",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Abdul Baki</h4>\n           <h5>  Chris Goudreau </h5>\n           <p>Roots reggae, dancehall, nyabinghi</p>\n                    <p>Address: 16 Main Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 02:00 PM</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://linktr.ee/rasabdulbaki/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Abdul Baki</h4>\n                  <p>Roots reggae, dancehall, nyabinghi</p>\n                    <p>Address: 16 Main Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 02:00 PM</p>\n                    <p>Category: Country / Roots/ Blues</p>\n                    <a href=\"https://linktr.ee/rasabdulbaki/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -428,7 +422,7 @@
         "category": "Folk/Acoustic",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Sisters of the Circle</h4>\n           <h5>   Lonesome Jenny</h5>\n           <p>Sarah Pirtle, Hana Zara and Christy Grecsek</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                <p>Time: 02:00 PM</p>\n                 <p>Category: Folk/Acoustic</p>\n                                  </div>"
+        "content": "<div>\n                    <h4>Sisters of the Circle</h4>\n               <p>Sarah Pirtle, Hana Zara and Christy Grecsek</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                <p>Time: 02:00 PM</p>\n                 <p>Category: Folk/Acoustic</p>\n                                  </div>"
     },
     {
         "coords": {
@@ -441,7 +435,7 @@
         "category": "Fiddles and more",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Wild Thyme</h4>\n           <h5>  33 Skeele (Sheryl Stanton and BobbyD) </h5>\n           <p>Celtic Band with 3 fiddles</p>\n                    <p>Address: 4 High Street Shelburne Falls, MA 01370</p>\n                  <p>Time: 02:00 PM</p>\n                   <p>Category: Fiddles and more</p>\n                              </div>"
+        "content": "<div>\n                    <h4>Wild Thyme</h4>\n                  <p>Celtic Band with 3 fiddles</p>\n                    <p>Address: 4 High Street Shelburne Falls, MA 01370</p>\n                  <p>Time: 02:00 PM</p>\n                   <p>Category: Fiddles and more</p>\n                              </div>"
     },
     {
         "coords": {
@@ -454,7 +448,7 @@
         "category": "Fiddles and more",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>Forest Avenue</h4>\n           <h5> Upcycling Under the Tent  </h5>\n           <p>Trad & original tunes w/ fiddles & more</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                <p>Time: 02:00 PM</p>\n                   <p>Category: Fiddles and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Forest Avenue</h4>\n                   <p>Trad & original tunes w/ fiddles & more</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                <p>Time: 02:00 PM</p>\n                   <p>Category: Fiddles and more</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -467,7 +461,7 @@
         "category": "Folk/Acoustic",
         "time": "02:00",
         "time_con": "02:00 PM",
-        "content": "<div>\n                    <h4>The Hilltown Ham Hocks</h4>\n           <h5> Paul Bennett Comedy  </h5>\n           <p>Modern folk trio with old time roots</p>\n                    <p>Address: 15 Water Street Shelburne Falls, MA 01370</p>\n                      <p>Time: 02:00 PM</p>\n                              <p>Category: Folk/Acoustic</p>\n                      <a href=\"https:www.hilltownhamhocks.com/\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>The Hilltown Ham Hocks</h4>\n               <p>Modern folk trio with old time roots</p>\n                    <p>Address: 15 Water Street Shelburne Falls, MA 01370</p>\n                      <p>Time: 02:00 PM</p>\n                              <p>Category: Folk/Acoustic</p>\n                      <a href=\"https:www.hilltownhamhocks.com/\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -480,7 +474,7 @@
         "category": "Experimental/Improv/Originals",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Sunny D and the Tangy Originals</h4>\n           <h5>  Various Local Comedians </h5>\n           <p>Progressive art-pop </p>\n                    <p>Address: 40 State Street, Shelburne Falls MA</p>\n                    <p>Time: 03:00 PM</p>\n                   <p>Category: Experimental/Improv/Originals</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Sunny D and the Tangy Originals</h4>\n                <p>Progressive art-pop </p>\n                    <p>Address: 40 State Street, Shelburne Falls MA</p>\n                    <p>Time: 03:00 PM</p>\n                   <p>Category: Experimental/Improv/Originals</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -493,7 +487,7 @@
         "category": "Folk/Acoustic",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Kevin Keady</h4>\n           <h5>  Hilltown Renaissance Vocal Quartet </h5>\n           <p>Original songwriter</p>\n                    <p>Address: 21 main street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                                 </div>"
+        "content": "<div>\n                    <h4>Kevin Keady</h4>\n                  <p>Original songwriter</p>\n                    <p>Address: 21 main street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                                 </div>"
     },
     {
         "coords": {
@@ -506,7 +500,7 @@
         "category": "A Capella",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Hilltown Renaissance Vocal Quartet</h4>\n           <h5>  Dave Dersham </h5>\n           <p>A Capella vocal quartet</p>\n                    <p>Address: 9 High Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: A Capella</p>\n                             </div>"
+        "content": "<div>\n                    <h4>Hilltown Renaissance Vocal Quartet</h4>\n                 <p>A Capella vocal quartet</p>\n                    <p>Address: 9 High Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: A Capella</p>\n                             </div>"
     },
     {
         "coords": {
@@ -519,7 +513,7 @@
         "category": "Jazz/Blues",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>The Band of Brothers Band</h4>\n           <h5>   James Cooke</h5>\n           <p>Instrumental Jazz R&B</p>\n                    <p>Address: 45 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                   <p>Category: Jazz/Blues</p>\n                    <a href=\"https://new.express.adobe.com/webpage/6jbCA4chtrQdk\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>The Band of Brothers Band</h4>\n                    <p>Instrumental Jazz R&B</p>\n                    <p>Address: 45 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                   <p>Category: Jazz/Blues</p>\n                    <a href=\"https://new.express.adobe.com/webpage/6jbCA4chtrQdk\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -532,20 +526,20 @@
         "category": "Jazz/Blues",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Survey Says</h4>\n           <h5>   The Riverbenders & Special Guests</h5>\n           <p>Experimental indie and jazz</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Survey Says</h4>\n                  <p>Experimental indie and jazz</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.603735,
+            "lng": -72.7399144
         },
         "type": "festival",
         "name": "Sher Levesque",
-        "address": "49 Conway St, Shelburne Falls, MA 01370",
+        "address": "8 Bridge Street Shelburne Falls, MA 01370",
         "category": "Experimental/Improv/Originals",
-        "time": "03:00",
-        "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Sher Levesque</h4>\n           <h5>  The Band of Brothers Band </h5>\n           <p>Experimental improv with percussions</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                     <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://www./\">More Info</a>\n                </div>"
+        "time": "Noon",
+        "time_con": "Noon",
+        "content": "<div>\n                    <h4>Sher Levesque</h4>\n                  <p>Experimental improv with percussions</p>\n                       <p>Address: 8 Bridge Street Shelburne Falls, MA 01370</p>\n                     <p>Time: Noon</p>\n                     <p>Category: Experimental/Improv/Originals</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -558,7 +552,7 @@
         "category": "Experimental/Improv/Originals",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Aaron Bilodeau</h4>\n           <h5> Wild Thyme  </h5>\n           <p>Solo musician with full band sound</p>\n                    <p>Address: 5 State St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                  <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://www.somaticsounds.com\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Aaron Bilodeau</h4>\n                <p>Solo musician with full band sound</p>\n                    <p>Address: 5 State St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                  <p>Category: Experimental/Improv/Originals</p>\n                    <a href=\"https://www.somaticsounds.com\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -571,7 +565,7 @@
         "category": "World Music",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>Four Gong Confucius</h4>\n           <h5>  Emily Bloom </h5>\n           <p>Sitar, bass, sax and oboe</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                    <p>Category: World Music</p>\n                    <a href=\"https://aaronbilodeau1.bandcamp.com//\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Four Gong Confucius</h4>\n                 <p>Sitar, bass, sax and oboe</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                    <p>Category: World Music</p>\n                    <a href=\"https://aaronbilodeau1.bandcamp.com//\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -584,7 +578,7 @@
         "category": "Folk/Acoustic",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>133 Skeele (Sheryl Stanton and BobbyD)</h4>\n           <h5>Wild Bill and Friends   </h5>\n           <p>Americana, folk, blues and originals</p>\n                    <p>Address: 53 Bridge St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                               </div>"
+        "content": "<div>\n                    <h4>133 Skeele (Sheryl Stanton and BobbyD)</h4>\n                   <p>Americana, folk, blues and originals</p>\n                    <p>Address: 53 Bridge St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                               </div>"
     },
     {
         "coords": {
@@ -597,7 +591,7 @@
         "category": "Folk/Acoustic",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>The Frost Heaves & Hales</h4>\n           <h5> JEZE  </h5>\n           <p>Freaky folk, Odd Americana</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://sherylstanton.net\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>The Frost Heaves & Hales</h4>\n                 <p>Freaky folk, Odd Americana</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 03:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://sherylstanton.net\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -610,7 +604,7 @@
         "category": "Poetry/Spoken Word/Comedy",
         "time": "03:00",
         "time_con": "03:00 PM",
-        "content": "<div>\n                    <h4>JEZE</h4>\n           <h5> Michael Nix  </h5>\n           <p>Readings of duets, trios, quintets</p>\n                    <p>Address: 35 Mechanic Street, Shelburne Falls MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: Poetry/Spoken Word/Comedy</p>\n                    <a href=\"https://www.thefrostheaves.coom\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>JEZE</h4>\n              <p>Readings of duets, trios, quintets</p>\n                    <p>Address: 35 Mechanic Street, Shelburne Falls MA 01370</p>\n                    <p>Time: 03:00 PM</p>\n                    <p>Category: Poetry/Spoken Word/Comedy</p>\n                    <a href=\"https://www.thefrostheaves.coom\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -623,7 +617,7 @@
         "category": "Folk/Acoustic",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Dave Dersham</h4>\n           <h5>  Morgan Kelsey </h5>\n           <p>Contemporary Acoustic Folk</p>\n                    <p>Address: 65 Main Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 04:00 PM</p>\n                  <p>Category: Folk/Acoustic</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Dave Dersham</h4>\n                   <p>Contemporary Acoustic Folk</p>\n                    <p>Address: 65 Main Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 04:00 PM</p>\n                  <p>Category: Folk/Acoustic</p>\n                                </div>"
     },
     {
         "coords": {
@@ -636,7 +630,7 @@
         "category": "Rock/Pop",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Aria K-M</h4>\n           <h5>  joanie Schwartz </h5>\n           <p>Singing violinist covering 2000's pop</p>\n                    <p>Address: 21 High Street, Shelburne Falls MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                    <p>Category: Rock/Pop</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Aria K-M</h4>\n              <p>Singing violinist covering 2000's pop</p>\n                    <p>Address: 21 High Street, Shelburne Falls MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                    <p>Category: Rock/Pop</p>\n                                </div>"
     },
     {
         "coords": {
@@ -662,7 +656,7 @@
         "category": "Experimental/Improv/Originals",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Trophy Husband MA</h4>\n           <h5>  Kevin Keady </h5>\n           <p>Progressive Funk, riffs, comedy</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                   <p>Category: Experimental/Improv/Originals</p>\n             <a href=\"https://www.trophyhusbandma.com/\">More Info</a>\n                         </div>"
+        "content": "<div>\n                    <h4>Trophy Husband MA</h4>\n              <p>Progressive Funk, riffs, comedy</p>\n                    <p>Address: 49 Conway St, Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                   <p>Category: Experimental/Improv/Originals</p>\n             <a href=\"https://www.trophyhusbandma.com/\">More Info</a>\n                         </div>"
     },
     {
         "coords": {
@@ -675,7 +669,7 @@
         "category": "Folk/Acoustic",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Vanessa Chatwood Kerby</h4>\n           <h5> Aria K-M  </h5>\n           <p>Americana, Roots and classic country</p>\n                    <p>Address: 8 Bridge Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                   <a href=\"https://youtu.be/zoGsOmx9Kpg?si=Pcnr9GJL1UO3WAaa\">More Info</a>\n               </div>"
+        "content": "<div>\n                    <h4>Vanessa Chatwood Kerby</h4>\n               <p>Americana, Roots and classic country</p>\n                    <p>Address: 8 Bridge Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                   <a href=\"https://youtu.be/zoGsOmx9Kpg?si=Pcnr9GJL1UO3WAaa\">More Info</a>\n               </div>"
     },
     {
         "coords": {
@@ -688,7 +682,7 @@
         "category": "Folk/Acoustic",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Emily Bloom</h4>\n           <h5> Abdul Baki  </h5>\n           <p>Folk-y Originals with cajon/trombone</p>\n                    <p>Address: 39 Water Street Shelburne Falls, MA 01370</p>\n                <p>Time: 04:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://open.spotify.com/artist/59aIaWi3VrOSwGAiCMSzdB?si=rz0LTnbOSbangB5aq3utcg\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Emily Bloom</h4>\n                <p>Folk-y Originals with cajon/trombone</p>\n                    <p>Address: 39 Water Street Shelburne Falls, MA 01370</p>\n                <p>Time: 04:00 PM</p>\n                    <p>Category: Folk/Acoustic</p>\n                    <a href=\"https://open.spotify.com/artist/59aIaWi3VrOSwGAiCMSzdB?si=rz0LTnbOSbangB5aq3utcg\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -701,7 +695,7 @@
         "category": "Poetry/Spoken Word/Comedy",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Paul Bennett and friends</h4>\n           <h5>  The Hilltown Ham Hocks </h5>\n           <p>Stand up Comedy for Grown Ups</p>\n                    <p>Address: 99 Main Street Shelburne Falls, MA 01370</p>\n               <p>Time: 04:00 PM</p>\n                     <p>Category: Poetry/Spoken Word/Comedy</p>\n                                </div>"
+        "content": "<div>\n                    <h4>Paul Bennett and friends</h4>\n                  <p>Stand up Comedy for Grown Ups</p>\n                    <p>Address: 99 Main Street Shelburne Falls, MA 01370</p>\n               <p>Time: 04:00 PM</p>\n                     <p>Category: Poetry/Spoken Word/Comedy</p>\n                                </div>"
     },
     {
         "coords": {
@@ -714,7 +708,7 @@
         "category": "Jazz/Blues",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Soular Eclipse</h4>\n           <h5>  The Popsicle song and other kid favorites </h5>\n           <p>R&B hits, touch of jazz panache</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                   <a href=\"https://www.facebook.com/soulareclipseband\">More Info</a>\n                     </div>"
+        "content": "<div>\n                    <h4>Soular Eclipse</h4>\n                   <p>R&B hits, touch of jazz panache</p>\n                    <p>Address: 31 Water Street Shelburne Falls, MA 01370</p>\n                 <p>Time: 04:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                   <a href=\"https://www.facebook.com/soulareclipseband\">More Info</a>\n                     </div>"
     },
     {
         "coords": {
@@ -727,7 +721,7 @@
         "category": "Fiddles and more",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Old-Time Music Jam</h4>\n           <h5> The Farley String Band  </h5>\n           <p>Old-Time Jam Session</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 04:00 PM</p>\n                    <p>Category: Fiddles and more</p>\n                               </div>"
+        "content": "<div>\n                    <h4>Old-Time Music Jam</h4>\n                  <p>Old-Time Jam Session</p>\n                    <p>Address: 19 Bridge Street Shelburne Falls, MA 01370</p>\n                   <p>Time: 04:00 PM</p>\n                    <p>Category: Fiddles and more</p>\n                               </div>"
     },
     {
         "coords": {
@@ -740,7 +734,7 @@
         "category": "Jazz/Blues",
         "time": "04:00",
         "time_con": "04:00 PM",
-        "content": "<div>\n                    <h4>Upstairs Dancing with a Lamp</h4>\n           <h5>  Davis Bates: Songs & Stories for Everyone </h5>\n           <p>Classic Swing with blues undertone</p>\n                    <p>Address: 40 State Street, Shelburne Falls MA</p>\n                    <p>Time: 04:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Upstairs Dancing with a Lamp</h4>\n                  <p>Classic Swing with blues undertone</p>\n                    <p>Address: 40 State Street, Shelburne Falls MA</p>\n                    <p>Time: 04:00 PM</p>\n                     <p>Category: Jazz/Blues</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -753,7 +747,7 @@
         "category": "Rock/Pop",
         "time": "05:00",
         "time_con": "05:00 PM",
-        "content": "<div>\n                    <h4>Bear Jam</h4>\n           <h5> Martin Espada and Lauren Schmidt  </h5>\n           <p>Folk Rock Cover Band</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                  <p>Time: 05:00 PM</p>\n                   <p>Category: Rock/Pop</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Bear Jam</h4>\n                  <p>Folk Rock Cover Band</p>\n                    <p>Address: 16 Water St, Shelburne Falls, MA 01370</p>\n                  <p>Time: 05:00 PM</p>\n                   <p>Category: Rock/Pop</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -766,7 +760,7 @@
         "category": "Folk/Acoustic",
         "time": "05:00",
         "time_con": "05:00 PM",
-        "content": "<div>\n                    <h4>Hana Zara</h4>\n           <h5>  Abbet Cutler and Paul Mariani </h5>\n           <p>Revolutionary love songs</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 05:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                        <a href=\"https://www.Hanazaramusic.bandcamp.com\">More Info</a>\n                </div>"
+        "content": "<div>\n                    <h4>Hana Zara</h4>\n          <p>Revolutionary love songs</p>\n                    <p>Address: 75 Mechanic Street Shelburne Falls, MA 01370</p>\n                     <p>Time: 05:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                        <a href=\"https://www.Hanazaramusic.bandcamp.com\">More Info</a>\n                </div>"
     },
     {
         "coords": {
@@ -779,7 +773,7 @@
         "category": "Folk/Acoustic",
         "time": "05:00",
         "time_con": "05:00 PM",
-        "content": "<div>\n                    <h4>Lonesome Jenny</h4>\n           <h5>  Lonesome Jenny </h5>\n           <p>Folk, blues, honky-tonk, Americana</p>\n                    <p>Address: 53 Bridge St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 05:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                <a href=\"https://www.youtube.com/@lonesomejenny/videos\">More Info</a>\n                        </div>"
+        "content": "<div>\n                    <h4>Lonesome Jenny</h4>\n             <p>Folk, blues, honky-tonk, Americana</p>\n                    <p>Address: 53 Bridge St, Shelburne Falls, MA 01370</p>\n                   <p>Time: 05:00 PM</p>\n                     <p>Category: Folk/Acoustic</p>\n                <a href=\"https://www.youtube.com/@lonesomejenny/videos\">More Info</a>\n                        </div>"
     },
     {
         "coords": {
@@ -787,18 +781,22 @@
             "lng": -72.73448644892197
         },
         "type": "parking",
+        "name": "Parking",
+        "address": "75 Mechanic Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>75 Mechanic Street</h4>"
     },
     {
         "coords": {
-            "lat": 42.6052364711711,
-            "lng": -72.73336546241607
+            "lat": 42.605125915857954,
+            "lng": -72.73322598755601
         },
         "type": "parking",
         "time": "AllTime",
         "time_con": "AllTime",
+        "name": "Parking",
+        "address": " 17 Severance Street",
         "content": "<h4>at 17 Severance Street</h4>"
     },
     {
@@ -809,16 +807,20 @@
         "type": "parking",
         "time": "AllTime",
         "time_con": "AllTime",
+        "name": "Parking",
+        "address": " Main Street",
         "content": "<h4>Parking at Main Street</h4>"
     },
     {
         "coords": {
-            "lat": 42.60112481929045,
-            "lng": -72.73758502296293
+            "lat": 42.60122081833086,
+            "lng": -72.73747460660383
         },
         "type": "parking",
         "time": "AllTime",
         "time_con": "AllTime",
+        "name": "Parking",
+        "address": " 49 Conway",
         "content": "<h4>Parking at 49 Conway</h4>"
     },
     {
@@ -827,6 +829,8 @@
             "lng": -72.734476
         },
         "type": "bathroom",
+        "name": "Washroom",
+        "address": " 75 Mechanic Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Bathroom at 75 Mechanic Street</h4>"
@@ -837,6 +841,8 @@
             "lng": -72.733559
         },
         "type": "bathroom",
+        "name": "Washroom",
+        "address": " 17 Severance Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Bathroom at 17 Severance Street</h4>"
@@ -847,6 +853,8 @@
             "lng": -72.737778
         },
         "type": "bathroom",
+        "name": "Washroom",
+        "address": "  75 Bridge Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Bathroom at 75 Bridge Street</h4>"
@@ -857,6 +865,8 @@
             "lng": -72.73785668429588
         },
         "type": "bathroom",
+        "name": "Washroom",
+        "address": " 49 Conway",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Bathroom at 49 Conway</h4>"
@@ -867,6 +877,8 @@
             "lng": -72.734876
         },
         "type": "shuttle",
+        "name": "Shuttle",
+        "address": "75 Mechanic Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Shuttle Stop at 75 Mechanic Street</h4>"
@@ -877,6 +889,8 @@
             "lng": -72.733759
         },
         "type": "shuttle",
+        "name": "Shuttle",
+        "address": " 17 Severance Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Shuttle Stop at 17 Severance Street</h4>"
@@ -887,6 +901,8 @@
             "lng": -72.737939
         },
         "type": "shuttle",
+        "name": "Shuttle",
+        "address": " 75 Bridge Street",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Shuttle Stop at 75 Bridge Street</h4>"
@@ -897,14 +913,16 @@
             "lng": -72.7379566842951
         },
         "type": "shuttle",
+        "name": "Shuttle",
+        "address": " 49 Conway",
         "time": "AllTime",
         "time_con": "AllTime",
         "content": "<h4>Shuttle Stop at 49 Conway</h4>"
     },
     {
         "coords": {
-            "lat": 42.6047976,
-            "lng": -72.735337
+            "lat": 42.60478177745578,
+            "lng": -72.73532627590998
         },
         "type": "ArtsWalk",
         "name": "Davis Bates @ 12 High Street",
@@ -912,12 +930,12 @@
         "category": "Children of all ages",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Davis Bates @ 12 High Street</h4>\n           <h5>   </h5>\n           <p>Songs & stories from the diverse folk traditions of New England and the United States.</p>\n                    <p>Address: 12 High Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: noon to 4pm </p>\n                    <p>Category: Children of all ages</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Davis Bates @ 12 High Street</h4>\n                 <p>Songs & stories from the diverse folk traditions of New England and the United States.</p>\n                    <p>Address: 12 High Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: noon to 4pm </p>\n                    <p>Category: Children of all ages</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6038055,
-            "lng": -72.73777
+            "lat": 42.603797574188306,
+            "lng": -72.73784510659313
         },
         "type": "ArtsWalk",
         "name": "Arms Library @60 Bridge Street",
@@ -925,7 +943,7 @@
         "category": "Children of all ages",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Arms Library @60 Bridge Street</h4>\n           <h5>   </h5>\n           <p>\t\"Read, Renew, Repeat!\" Sustainable crafting under the tent at Arms Library. All ages!</p>\n                    <p>Address: 60 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: noon to 4pm </p>\n                    <p>Category: Children of all ages</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Arms Library @60 Bridge Street</h4>\n                 <p>\t\"Read, Renew, Repeat!\" Sustainable crafting under the tent at Arms Library. All ages!</p>\n                    <p>Address: 60 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: noon to 4pm </p>\n                    <p>Category: Children of all ages</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -938,7 +956,7 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Mocha Maya's Cafe</h4>\n           <h5>   </h5>\n           <p>On exhibit the work of Mary Walsh Martel, \"Celebrate the Flowers\". A selection of Mary's framed original watercolor and wooden block depicting florals \"to celebrate this wonderful village and Bridge of Flowers.\"</p>\n                    <p>Address: 47 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 8am to 5pm </p>\n                     <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Mocha Maya's Cafe</h4>\n               <p>On exhibit the work of Mary Walsh Martel, \"Celebrate the Flowers\". A selection of Mary's framed original watercolor and wooden block depicting florals \"to celebrate this wonderful village and Bridge of Flowers.\"</p>\n                    <p>Address: 47 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 8am to 5pm </p>\n                     <p>Category: Visual Art</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -951,12 +969,12 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Shelburne Arts Cooperative</h4>\n           <h5>   </h5>\n           <p>Featuring a group show of visual art that expresses the joys of West County living in July.  The show is titled \"Lazy Days of Summer\"</p>\n                    <p>Address: 26 Bridge St, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 11am to 5pm </p>\n                   <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Shelburne Arts Cooperative</h4>\n               <p>Featuring a group show of visual art that expresses the joys of West County living in July.  The show is titled \"Lazy Days of Summer\"</p>\n                    <p>Address: 26 Bridge St, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 11am to 5pm </p>\n                   <p>Category: Visual Art</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6038126,
-            "lng": -72.7394146
+            "lat": 42.603729,
+            "lng": -72.740057
         },
         "type": "ArtsWalk",
         "name": "Watermark Gallery",
@@ -964,7 +982,7 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Watermark Gallery</h4>\n           <h5>   </h5>\n           <p>Allo Allo! Gallery reception celebrating new work by Cynthia Consentino, sculpture and Andrew Sovjani, photography. And Bastille Day!</p>\n                    <p>Address: 20 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 4pm to 8pm </p>\n                  <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Watermark Gallery</h4>\n           <p>Allo Allo! Gallery reception celebrating new work by Cynthia Consentino, sculpture and Andrew Sovjani, photography. And Bastille Day!</p>\n                    <p>Address: 20 Bridge Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 4pm to 8pm </p>\n                  <p>Category: Visual Art</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -977,7 +995,7 @@
         "category": "Children of all ages",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Mo's Fudge Factor</h4>\n           <h5>   </h5>\n           <p>Mo will be baking music and flower-themed, hand-decorated cupcakes. Also available are handcrafted, themed sugar cookies from the talented Crafted by Kaytlyn. Quantities are limited.</p>\n                    <p>Address: 9 State Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 5pm </p>\n                  <p>Category: Children of all ages</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Mo's Fudge Factor</h4>\n                     <p>Mo will be baking music and flower-themed, hand-decorated cupcakes. Also available are handcrafted, themed sugar cookies from the talented Crafted by Kaytlyn. Quantities are limited.</p>\n                    <p>Address: 9 State Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 5pm </p>\n                  <p>Category: Children of all ages</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -990,7 +1008,7 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Salmon Falls Gallery</h4>\n           <h5>   </h5>\n           <p>Featured Exhibits JEREMY SINKUS: Geo Modern, Subterranean Designs in Glass and ANNALEAH MOON GREGOIRE: Unpleasantly Beautiful.</p>\n                    <p>Address: 1 Ashfield Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 11am to 5pm </p>\n                    <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Salmon Falls Gallery</h4>\n                <p>Featured Exhibits JEREMY SINKUS: Geo Modern, Subterranean Designs in Glass and ANNALEAH MOON GREGOIRE: Unpleasantly Beautiful.</p>\n                    <p>Address: 1 Ashfield Street, Shelburne Falls, MA 01370, USA</p>\n                   <p>Time: 11am to 5pm </p>\n                    <p>Category: Visual Art</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -1003,12 +1021,12 @@
         "category": "Crafts, quilts, clay and more",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Ann Brauer Quilt Studio</h4>\n           <h5>   </h5>\n           <p>Distinctive art quilts and much more celebrating 43 years in business. Come see what is new, watch me work or discuss your projects..</p>\n                    <p>Address: 2 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 10am to 5pm </p>\n                     <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Ann Brauer Quilt Studio</h4>\n               <p>Distinctive art quilts and much more celebrating 43 years in business. Come see what is new, watch me work or discuss your projects..</p>\n                    <p>Address: 2 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 10am to 5pm </p>\n                     <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.600795665897735,
+            "lng": -72.73809633719837
         },
         "type": "ArtsWalk",
         "name": "Radyshes",
@@ -1016,12 +1034,12 @@
         "category": "Children of all ages",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Radyshes</h4>\n           <h5>   </h5>\n           <p>Handmade toys for children from 1 - 100!</p>\n                    <p>Address: The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 3pm </p>\n                   <p>Category: Children of all ages</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Radyshes</h4>\n                   <p>Handmade toys for children from 1 - 100!</p>\n                    <p>Address: The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 3pm </p>\n                   <p>Category: Children of all ages</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.600764076433855,
+            "lng": -72.73777447213678
         },
         "type": "ArtsWalk",
         "name": "Wool & Weft",
@@ -1029,12 +1047,12 @@
         "category": "Crafts, quilts, clay and more",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Wool & Weft</h4>\n           <h5>   </h5>\n           <p>A working textile studio featuring traditionally felted and handwoven goods. </p>\n                    <p>Address: The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 4pm </p>\n                   <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Wool & Weft</h4>\n              <p>A working textile studio featuring traditionally felted and handwoven goods. </p>\n                    <p>Address: The Mill 49 Conway Street, Shelburne Falls, MA 01370, USA</p>\n                    <p>Time: 11am to 4pm </p>\n                   <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.601030051323725,
+            "lng": -72.73752064971818
         },
         "type": "ArtsWalk",
         "name": "Worn at the Edges",
@@ -1042,12 +1060,12 @@
         "category": "Crafts, quilts, clay and more",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Worn at the Edges</h4>\n           <h5>   </h5>\n           <p>Wearable, frame-able, and mail-able local scenes, including the Shelburne Falls iron bridge!</p>\n                    <p>Address: The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA</p>\n                                    <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Worn at the Edges</h4>\n                  <p>Wearable, frame-able, and mail-able local scenes, including the Shelburne Falls iron bridge!</p>\n                    <p>Address: The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA</p>\n                                    <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
     },
-    {
+    { 
         "coords": {
-            "lat": 42.6011263,
-            "lng": -72.73758459999999
+            "lat": 42.601314354708464,
+            "lng": -72.73769251108437
         },
         "type": "ArtsWalk",
         "name": "The Handle Factory Community Clay Center",
@@ -1055,12 +1073,12 @@
         "category": "Crafts, quilts, clay and more",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>The Handle Factory Community Clay Center</h4>\n           <h5>   </h5>\n           <p>\"Clay Day\" featuring pottery sales, a Pots for Palestinians seconds sale fundraiser,  and hands-on wheel throwing and hand building clay for all ages and skill levels. </p>\n                    <p>Address: The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 11am to 4pm </p>\n                   <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>The Handle Factory Community Clay Center</h4>\n               <p>\"Clay Day\" featuring pottery sales, a Pots for Palestinians seconds sale fundraiser,  and hands-on wheel throwing and hand building clay for all ages and skill levels. </p>\n                    <p>Address: The Mill 49 Conway Street , Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 11am to 4pm </p>\n                   <p>Category: Crafts, quilts, clay and more</p>\n                                   </div>"
     },
     {
         "coords": {
-            "lat": 42.6011464,
-            "lng": -72.7384369
+            "lat": 42.60088253683959,
+            "lng": -72.73763499677898
         },
         "type": "ArtsWalk",
         "name": "Pastels4now",
@@ -1068,7 +1086,7 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Pastels4now</h4>\n           <h5>   </h5>\n           <p>From local landscapes to vivid abstracts I will be offering many pastel explorations.</p>\n                    <p>Address: The Mill 49 Conway Street - Studio 201 , Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 8am to 4pm </p>\n                    <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Pastels4now</h4>\n                   <p>From local landscapes to vivid abstracts I will be offering many pastel explorations.</p>\n                    <p>Address: The Mill 49 Conway Street - Studio 201 , Shelburne Falls, MA 01370, USA</p>\n                  <p>Time: 8am to 4pm </p>\n                    <p>Category: Visual Art</p>\n                                   </div>"
     },
     {
         "coords": {
@@ -1081,7 +1099,7 @@
         "category": "Visual Art",
         "time": "AllTime",
         "time_con": "AllTime",
-        "content": "<div>\n                    <h4>Amherst Plein Air Society</h4>\n           <h5>   </h5>\n           <p>Painters will be setting up their easels and painting landscapes throughout the village from 9-12, with a critique at the end of the Bridge of Flowers from 12-1.</p>\n                    <p>Address: Meet at Bridge of Flowers , Shelburne Falls, MA 01370, USA</p>\n                      <p>Time: 11am to Noon </p>\n                     <p>Category: Visual Art</p>\n                                   </div>"
+        "content": "<div>\n                    <h4>Amherst Plein Air Society</h4>\n                <p>Painters will be setting up their easels and painting landscapes throughout the village from 9-12, with a critique at the end of the Bridge of Flowers from 12-1.</p>\n                    <p>Address: Meet at Bridge of Flowers , Shelburne Falls, MA 01370, USA</p>\n                      <p>Time: 11am to Noon </p>\n                     <p>Category: Visual Art</p>\n                                   </div>"
     }
 ]; // Paste your JSON data here
 
@@ -1110,6 +1128,25 @@
 
             addMarkers(jsonData);
             populateFilters();
+            populateList(jsonData);
+        }
+
+
+        function populateList(data) {
+            const list = document.getElementById('list');
+            list.innerHTML = ''; // Clear the list
+
+            data.forEach(item => {
+                const listItem = document.createElement('div');
+                listItem.classList.add('list-item');
+                listItem.innerHTML = `
+                    <h4>${item.name}</h4>
+                    <p>Address: ${item.address}</p>
+                    <p>Time: ${item.time_con}</p>
+                    <p>Category: ${item.category ?? ' '}</p> </br>
+                `;
+                list.appendChild(listItem);
+            });
         }
 
         function populateFilters() {
@@ -1193,6 +1230,7 @@
             });
 
             addMarkers(filteredData);
+            populateList(filteredData);
         }
 
         function resetFilters(changedFilter) {
