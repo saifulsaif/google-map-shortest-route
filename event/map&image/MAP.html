@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Geocoded Addresses</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=callback&callback=initMap" async defer></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            height: 100%;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #00BCD4;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #777070;
+            width: 40%;
+            box-shadow: 0 4px 6px rgb(191 138 138 / 10%);
+            border-radius: 7px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 7px;
+        }
+        .close:hover,
+        .close:focus {
+            color: rgb(117, 114, 114);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #modalTitle{
+          background-color: #282828;
+          color: white;
+          margin: 0;
+          padding: 9px 7px 10px 8px;
+        }
+
+        .logo-container {
+            text-align: center;
+        }
+
+        .modal-logo {
+            width: 100px; /* Adjust width as needed */
+            height: auto;
+        }
+
+        .image-container {
+            text-align: center; /* Aligns the images inline */
+            margin-top: 20px;
+        }
+
+        .inline-image {
+          width: 32%;
+          margin: -2px 3px;
+          display: inline-block;
+          vertical-align: top;
+          object-fit: cover;
+          border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2 id="modalTitle"></h2>
+          <div class="logo-container">
+              <img src="logo.png" alt="Logo" class="modal-logo">
+          </div>
+          <p id="modalAddress"></p>
+          <p id="modalDescription"></p>
+          <p id="modalStartedAs"></p>
+          <p id="modalBowDescription"></p>
+          <p id="modalOpened"></p>
+          <p id="modalLayer"></p>
+          <p id="modalLayerDetail"></p>
+          <div class="image-container">
+              <img src="image1.jpeg" alt="Image 1" class="inline-image">
+              <img src="image2.jpg" alt="Image 2" class="inline-image">
+              <img src="image3.jpeg" alt="Image 3" class="inline-image">
+          </div>
+      </div>
+  </div>
+  
+    <script>
+        const locations = [
+        {
+    "address": "260 Beacon St, Somerville, MA 02143",
+    "newLocationName": "RENATA & Co.",
+    "currentDescription": "Spacious studio specializing in brows, lash lifts + body waxing",
+    "startedAtBowAs": "Brows by Renata",
+    "descriptionAtBow": "One chair eyebrow shaping studio",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3823048,
+      "lng": -71.1119401
+    },
+    "logo": "https://images.squarespace-cdn.com/content/v1/5e988f540478c7156085426d/10238b99-0eb8-49d3-9bb6-c06e5deba22c/png-white.png?format=1500w",
+    "images": [
+        "https://lh5.googleusercontent.com/p/AF1QipPTf86HCAtJfWiGixGMkkdPck4KILD-LqR1sd_Z=w141-h176-n-k-no-nu",
+        "https://lh3.googleusercontent.com/p/AF1QipOTzWEUzzjyErJhOJHZLlMfONmlVaBkI6aY5P0f=s1360-w1360-h1020",
+        "https://lh3.googleusercontent.com/p/AF1QipMn-BZzpVArUIj6MkmNyjgT8HPVYAa4PNRVQoQc=s1360-w1360-h1020",
+    ]
+  },
+  {
+    "address": "1735 Massachusetts Ave, Cambridge, MA 02138",
+    "newLocationName": "We Thieves",
+    "currentDescription": "An award winning vintage store with mulitple locations",
+    "startedAtBowAs": "We Thieves",
+    "descriptionAtBow": "A small vintage shop",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3842804,
+      "lng": -71.11918179999999
+    },
+    "logo": "https://wethieves.com/cdn/shop/files/We_Thieves_Logo_Black_160x.png?v=1614310577",
+    "images": [
+        "https://lh3.googleusercontent.com/p/AF1QipMinaK0o3Yeh4K-e4UVRyxbT7YkczO_wARBVqZr=s1360-w1360-h1020",
+        "https://lh3.googleusercontent.com/p/AF1QipM6_Y56YlSHulMPgfdrygguGCiCK-H5eLmPAS0H=s1360-w1360-h1020",
+        "https://lh5.googleusercontent.com/p/AF1QipMVVmphYyqcVpAmk0YJNzTELWMGHp-ROmj0uwJz=w141-h235-n-k-no-nu",
+    ]
+  },
+  {
+    "address": "1307 Cambridge St, Cambridge, MA 02139",
+    "newLocationName": "We Thieves",
+    "currentDescription": "An award winning vintage store with mulitple locations",
+    "startedAtBowAs": "We Thieves",
+    "descriptionAtBow": "A small vintage shop",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3736682,
+      "lng": -71.09943129999999
+    },
+    "logo": "https://wethieves.com/cdn/shop/files/We_Thieves_Logo_Black_160x.png?v=1614310577",
+    "images": [
+        "https://lh3.googleusercontent.com/p/AF1QipM6_Y56YlSHulMPgfdrygguGCiCK-H5eLmPAS0H=s1360-w1360-h1020",
+        "https://lh5.googleusercontent.com/p/AF1QipMVVmphYyqcVpAmk0YJNzTELWMGHp-ROmj0uwJz=w141-h235-n-k-no-nu",
+        "https://lh5.googleusercontent.com/p/AF1QipNBiID9NgxrHev02bVl4l3l7Hey2PK8RtjDhQ5p=w141-h235-n-k-no-nu",
+    ]
+  },
+  {
+    "address": "585 Somerville Ave, Somerville, MA 02143",
+    "newLocationName": "Koshari Mama",
+    "currentDescription": "A full service restaurant Vegan Egyptian restaurant, still run by the mother/daughter duo!",
+    "startedAtBowAs": "Koshari Mama",
+    "descriptionAtBow": "A mother/daughter run take out vegan Egyptian spot",
+    "openedAtBow": "2019",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3839227,
+      "lng": -71.10867999999999
+    },
+    "logo": "https://www.kosharimama.com/wp-content/uploads/2019/09/KMama-logo12BB-300.gif",
+    "images": [
+        "https://lh3.googleusercontent.com/p/AF1QipMOBMM0Wwh9oXGYySo-q3-7AE70mjkWLjh3YhEC=s1360-w1360-h1020",
+        "https://lh3.googleusercontent.com/p/AF1QipOaZxqrGZ5X9INNq4CtNmml0RdwHrhPpe-4Gws0=s1360-w1360-h1020",
+        "https://lh3.googleusercontent.com/p/AF1QipMmdEHUIsMrg35lbhRz285BkeP65IPYhvYdXrkr=s1360-w1360-h1020",
+    ]
+  },
+  {
+    "address": "231 Somerville Ave, Somerville, MA 02143",
+    "newLocationName": "Rococo Floral",
+    "currentDescription": "A full scale floral shop and studio",
+    "startedAtBowAs": "Rococo Floral",
+    "descriptionAtBow": "A small scale florist",
+    "openedAtBow": "2021",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3783949,
+      "lng": -71.0917229
+    }
+  },
+  {
+    "address": "1741 Massachusetts Ave, Cambridge, MA 02140",
+    "newLocationName": "Dear Annie",
+    "currentDescription": "A seafood focused tavern named one of the New York Times Best Restaurants in America and 2022",
+    "startedAtBowAs": "Rebel Rebel/ Lauren Friel",
+    "descriptionAtBow": "A tiny womxn owned natural wine bar nominated three times for a James Beard award",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3846289,
+      "lng": -71.1191585
+    }
+  },
+  {
+    "address": "30 Bow St. Somerville, MA 02143",
+    "newLocationName": "Wild Child",
+    "currentDescription": "A retail natural wine shop on the first floor of a historic Somerville house.",
+    "startedAtBowAs": "Rebel Rebel/ Lauren Friel",
+    "descriptionAtBow": "A tiny womxn owned natural wine bar nominated three times for a James Beard award",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3811484,
+      "lng": -71.09755129999999
+    }
+  },
+  {
+    "address": "525 Western Ave, Boston, MA 02135",
+    "newLocationName": "Super Bien",
+    "currentDescription": "A grocery bar featuring all South American wines, your favoirite Buenas snacks and more",
+    "startedAtBowAs": "Buenas",
+    "descriptionAtBow": "A kiosko focused on empanadas and other South American treats.",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3617871,
+      "lng": -71.1448892
+    }
+  },
+  {
+    "address": "204 Hampshire St, Cambridge, MA 02139",
+    "newLocationName": "Zuzu's Petals",
+    "currentDescription": "A sit down dessert and wine cafe",
+    "startedAtBowAs": "gate comme des filles/Picnic and Pantry",
+    "descriptionAtBow": "A chocolate and sweets shop in the French tradition",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3731166,
+      "lng": -71.1003229
+    }
+  },
+  {
+    "address": "91 Main St, Hudson, MA 01749",
+    "newLocationName": "Islay's Terrace",
+    "currentDescription": "A collection of goods created by local makers",
+    "startedAtBowAs": "Homeslice",
+    "descriptionAtBow": "A collection of goods created by local makers",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3910322,
+      "lng": -71.56743639999999
+    }
+  },
+  {
+    "address": "21 Hawkins St, Somerville, MA 02143",
+    "newLocationName": "Make & Mend",
+    "currentDescription": "A beautifully organized second-hand arts and crafts store",
+    "startedAtBowAs": "Make and Mend",
+    "descriptionAtBow": "A tiny second-hand arts and crafts shop",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3796951,
+      "lng": -71.09813369999999
+    }
+  },
+  {
+    "address": "22A College Avenue, Somerville MA 02144",
+    "newLocationName": "Shirley",
+    "currentDescription": "A fully built out bakery and sandwich shop",
+    "startedAtBowAs": "Shirley",
+    "descriptionAtBow": "A tiny sandwich shop and bakery",
+    "openedAtBow": "2021",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.39728119999999,
+      "lng": -71.1220482
+    }
+  },
+  {
+    "address": "623 Tremont St. Boston, MA 02118",
+    "newLocationName": "Black Owned Bos.",
+    "currentDescription": "A beautiful retail space selling a curated selection of goods from locally and Black owned businesses",
+    "startedAtBowAs": "Black owned Bos",
+    "descriptionAtBow": "A brick and mortar popup space providing space for Black owned businesses to try out a brick and mortar space",
+    "openedAtBow": "2021",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3426807,
+      "lng": -71.0744993
+    }
+  },
+  {
+    "address": "6 Bow Mkt Wy, Somerville, MA 02143",
+    "newLocationName": "Carolicious Gourmet",
+    "currentDescription": "An all-day cafe inspired by Miami and Venezeula",
+    "startedAtBowAs": "Carolicious",
+    "descriptionAtBow": "The first resident in Nibble Kitchen's rotating kitchen space",
+    "openedAtBow": "2019",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3808638,
+      "lng": -71.0981668
+    }
+  },
+  {
+    "address": "14 Tyler St, Somerville, MA 02143",
+    "newLocationName": "Carolicious (Aeronaught)",
+    "currentDescription": "A stand selling traditional and unique Venezeulan Arepas",
+    "startedAtBowAs": "Carolicious",
+    "descriptionAtBow": "The first resident in Nibble Kitchen's rotating kitchen space",
+    "openedAtBow": "2019",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3816746,
+      "lng": -71.1059111
+    }
+  },
+  {
+    "address": "700 Boylston St, Boston, MA 02116",
+    "newLocationName": "Carolicious (Boston Public Library)",
+    "currentDescription": "A stand selling traditional and unique Venezeulan Arepas",
+    "startedAtBowAs": "Carolicious",
+    "descriptionAtBow": "The first resident in Nibble Kitchen's rotating kitchen space",
+    "openedAtBow": "2019",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3492855,
+      "lng": -71.078283
+    }
+  },
+  {
+    "address": "84 Massachusetts Ave, Cambridge, MA 02139",
+    "newLocationName": "Carolicious (MIT)",
+    "currentDescription": "A stand selling traditional and unique Venezeulan Arepas",
+    "startedAtBowAs": "Carolicious",
+    "descriptionAtBow": "The first resident in Nibble Kitchen's rotating kitchen space",
+    "openedAtBow": "2019",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3590265,
+      "lng": -71.0947699
+    }
+  },
+  {
+    "address": "Japan, 〒902-0065 Okinawa, Naha, Tsuboya, 1 Chome−6−2 1F",
+    "newLocationName": "See Em Why K シーエムワイケー",
+    "currentDescription": "A beautiful boutique selling a mix of curated and in house designed home and personal goods",
+    "startedAtBowAs": "Crane and Turtle",
+    "descriptionAtBow": "A small boutique selling all Japanese made goods",
+    "openedAtBow": "2020",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 26.2132529,
+      "lng": 127.6896063
+    }
+  },
+  {
+    "address": "4312 Main St, Pittsburgh, PA 15224",
+    "newLocationName": "Trace Brewing",
+    "currentDescription": "A brewery and coffee shop in the heart Pittsburgh",
+    "startedAtBowAs": "Remnant Brewing",
+    "descriptionAtBow": "A brewery and coffee shop with a beautiful outdoor patio",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 40.4640875,
+      "lng": -79.9533293
+    }
+  },
+  {
+    "address": "877 Cambridge St, Cambridge, MA 02141",
+    "newLocationName": "Satelite",
+    "currentDescription": "A full service brewpub with an incredible mix of live music",
+    "startedAtBowAs": "Remnant Brewing",
+    "descriptionAtBow": "A brewery and coffee shop with a beautiful outdoor patio",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3727439,
+      "lng": -71.0914444
+    }
+  },
+  {
+    "address": "265 Cabot St, Beverly, MA 01915",
+    "newLocationName": "Soundtracks",
+    "currentDescription": "A record store run by the incomparable DJ L7 with a focus on soundtracks",
+    "startedAtBowAs": "Vinyl Index",
+    "descriptionAtBow": "An record store selling new and used vinyl from across genres",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.5503627,
+      "lng": -70.8776536
+    }
+  },
+  {
+    "address": "380 Western Ave, Allston, MA 02134",
+    "newLocationName": "Perillas",
+    "currentDescription": "A fully built out kitchen and to-go concept, focused on Bibimbap",
+    "startedAtBowAs": "Perillas",
+    "descriptionAtBow": "A fast casual Korean bibimbap concept",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3627179,
+      "lng": -71.13762129999999
+    }
+  },
+  {
+    "address": "100 Hanover St, Boston, MA 02108",
+    "newLocationName": "Perillas",
+    "currentDescription": "The Perillas concept in the Boston Public Market",
+    "startedAtBowAs": "Perillas",
+    "descriptionAtBow": "A fast casual Korean bibimbap concept",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.3616458,
+      "lng": -71.05638119999999
+    }
+  },
+  {
+    "address": "Logan Airport Terminal C",
+    "newLocationName": "Perillas",
+    "currentDescription": "The Perillas concept in Boston Logan Airport",
+    "startedAtBowAs": "Perillas",
+    "descriptionAtBow": "A fast casual Korean bibimbap concept",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 42.366953,
+      "lng": -71.017562
+    }
+  },
+  {
+    "address": "115 NW 6th St, Fort Lauderdale, FL 33311",
+    "newLocationName": "Perillas",
+    "currentDescription": "Perillas goes south! The first location out of Massachusetts",
+    "startedAtBowAs": "Perillas",
+    "descriptionAtBow": "A fast casual Korean bibimbap concept",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First B&M",
+    "coords": {
+      "lat": 26.1300528,
+      "lng": -80.1452134
+    }
+  },
+  {
+    "address": "20 Court Street, Plymouth MA, 02360",
+    "newLocationName": "Keegans Kreations",
+    "currentDescription": "A beautiful bakery in the heart of Plymouth",
+    "startedAtBowAs": "Keegans Kreations",
+    "descriptionAtBow": "A weekend popup bakery at Remnant Brewing",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First residency",
+    "coords": {
+      "lat": 41.9574232,
+      "lng": -70.66602999999999
+    }
+  },
+  {
+    "address": "136 Main Street, Kingston, MA, 02364",
+    "newLocationName": "Keegans Kreations",
+    "currentDescription": "A beautiful bakery in Plymouth",
+    "startedAtBowAs": "Keegans Kreations",
+    "descriptionAtBow": "A weekend popup bakery at Remnant Brewing",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First residency",
+    "coords": {
+      "lat": 41.9873124,
+      "lng": -70.7159279
+    }
+  },
+  {
+    "address": "75 Washington St, Somerville, MA 02143",
+    "newLocationName": "All She Wrote Books",
+    "currentDescription": "An intersectional, inclusive feminist and queer bookstore in East Somerville",
+    "startedAtBowAs": "All She Wrote Books",
+    "descriptionAtBow": "An intersectional, inclusive feminist and queer bookstore popup on a cart in Canopy Room",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 42.3817724,
+      "lng": -71.0846652
+    }
+  },
+  {
+    "address": "16 Union Square, Somerville, MA 02143",
+    "newLocationName": "Culture House",
+    "currentDescription": "A non-profit that improves livability in local communities by transforming underutilized spaces into vibrant social infrastructure.",
+    "startedAtBowAs": "Culture House",
+    "descriptionAtBow": "A non-profit that improves livability in local communities by transforming underutilized spaces into vibrant social infrastructure.",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 42.3794412,
+      "lng": -71.0961782
+    }
+  },
+  {
+    "address": "525 Western Ave #6, Brighton, MA 02135",
+    "newLocationName": "Koji Club",
+    "currentDescription": "An award winning Sake Bar in Boston",
+    "startedAtBowAs": "Koji Club",
+    "descriptionAtBow": "A popup Sake shop hosted in Rebel Rebel",
+    "openedAtBow": "2020",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 42.3617871,
+      "lng": -71.1448892
+    }
+  },
+  {
+    "address": "310 Bourne Ave Suite 14-1, Rumford RI 02916",
+    "newLocationName": "Myrth",
+    "currentDescription": "A fully built out ceramics studio and showroom in East Providence",
+    "startedAtBowAs": "Myrth",
+    "descriptionAtBow": "A popup selling handmade ceramics",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 41.8425939,
+      "lng": -71.3692445
+    }
+  },
+  {
+    "address": "99 Franklin St, Allston, MA 02134",
+    "newLocationName": "Exit Gallery",
+    "currentDescription": "An art gallery that occupies empty Boston storefronts",
+    "startedAtBowAs": "Exit Gallery",
+    "descriptionAtBow": "A popup art gallery featuring a range of local artists",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 42.3594805,
+      "lng": -71.13299169999999
+    }
+  },
+  {
+    "address": "1020 Great Plain Ave, Needham, MA 02492",
+    "newLocationName": "Wesleaf",
+    "currentDescription": "A plant shop owned and operated by Weslie Etienne Pierre",
+    "startedAtBowAs": "Wesleaf",
+    "descriptionAtBow": "A popup plants shop owned and operated by Weslie Etienne Pierre",
+    "openedAtBow": "2021",
+    "layer": "Started",
+    "layerDetail": "First popup",
+    "coords": {
+      "lat": 42.2801154,
+      "lng": -71.2372082
+    }
+  },
+  {
+    "address": "252 Commercial Street, Boston, MA 02109",
+    "newLocationName": "Sunny Girl",
+    "currentDescription": "A beautiful sandwich shop focused on breakfast",
+    "startedAtBowAs": "Vinyl Index and Hot Box",
+    "descriptionAtBow": "The best of the North and South shores in one location",
+    "openedAtBow": "2018",
+    "layer": "Started",
+    "layerDetail": "Met at Bow Market",
+    "coords": {
+      "lat": 42.36399900000001,
+      "lng": -71.051367
+    }
+  },
+  {
+    "address": "2304 Massachusetts Ave, Cambridge, MA 02140",
+    "newLocationName": "Mammas",
+    "currentDescription": "A values driven grocery and wine store in Cambridge",
+    "startedAtBowAs": "Rebel Rebel",
+    "descriptionAtBow": "A member of the opening team at Rebel Rebel",
+    "openedAtBow": "2018",
+    "layer": "Journey",
+    "layerDetail": "Worked at Bow Market",
+    "coords": {
+      "lat": 42.3951374,
+      "lng": -71.12803749999999
+    }
+  },
+  {
+    "address": "331 Sumner St, East Boston, MA 02128",
+    "newLocationName": "The Quite Few",
+    "currentDescription": "Your neighborhood whiskey tavern! No frills. Couple of spills.",
+    "startedAtBowAs": "Rebel Rebel",
+    "descriptionAtBow": "A member of the opening team at Rebel Rebel",
+    "openedAtBow": "2018",
+    "layer": "Journey",
+    "layerDetail": "Worked at Bow Market",
+    "coords": {
+      "lat": 42.3670857,
+      "lng": -71.0359988
+    }
+  },
+  {
+    "address": "400 Dorchester St, South Boston, MA 02127",
+    "newLocationName": "Small Victories",
+    "currentDescription": "The sequel to the beloved Quite Few in South Boston",
+    "startedAtBowAs": "Rebel Rebel",
+    "descriptionAtBow": "A member of the opening team at Rebel Rebel",
+    "openedAtBow": "2018",
+    "layer": "Journey",
+    "layerDetail": "Worked at Bow Market",
+    "coords": {
+      "lat": 42.3296541,
+      "lng": -71.0565645
+    }
+  },
+  {
+    "address": "65 Thayer St, Boston, MA 02118",
+    "newLocationName": "Wyllo",
+    "currentDescription": "A boutique with a curated collection of small batch clothing, accessories, art and gifts",
+    "startedAtBowAs": "Wyllo",
+    "descriptionAtBow": "Popup focused on curated jewelry, clothing, and accessories",
+    "openedAtBow": "2019",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3423765,
+      "lng": -71.0643115
+    }
+  },
+  {
+    "address": "242 E Berkeley St, Boston, MA 02118",
+    "newLocationName": "More than Words",
+    "currentDescription": "A permanent bookstore for a non profit youth-run business",
+    "startedAtBowAs": "More Than Words",
+    "descriptionAtBow": "A bookstore popup for a non profit youth-run business",
+    "openedAtBow": "2018",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3434818,
+      "lng": -71.0634266
+    }
+  },
+  {
+    "address": "524 Western Avenue Radius Building, Boston, MA 02135",
+    "newLocationName": "House of Arts and Crafts",
+    "currentDescription": "A permanent candle shop and studio",
+    "startedAtBowAs": "House of Arts and Crafts",
+    "descriptionAtBow": "A candle popup at Black Owned Bos.Shiftspace",
+    "openedAtBow": "2021",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3614438,
+      "lng": -71.144935
+    }
+  },
+  {
+    "address": "73 Exchange St, Lynn, MA 01901",
+    "newLocationName": "Nightshade Noodle Bar",
+    "currentDescription": "An award winning contemporary Vietnamese restaurant",
+    "startedAtBowAs": "Nightshade Noodle Bar",
+    "descriptionAtBow": "A noodle popup hosted in Buenas",
+    "openedAtBow": "2019",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.463237,
+      "lng": -70.9421727
+    }
+  },
+  {
+    "address": "71 Exchange St, Lynn, MA 01901",
+    "newLocationName": "Sin City Superette",
+    "currentDescription": "A community market and gathering place",
+    "startedAtBowAs": "Nightshade Noodle Bar",
+    "descriptionAtBow": "A noodle popup hosted in Buenas",
+    "openedAtBow": "2019",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.4632562,
+      "lng": -70.9422342
+    }
+  },
+  {
+    "address": "279a Broadway, Cambridge, MA 02139",
+    "newLocationName": "Judy's Bay",
+    "currentDescription": "A full service New England Izakaya",
+    "startedAtBowAs": "Judy's Bay",
+    "descriptionAtBow": "A popup selling Asian inspired barbecue",
+    "openedAtBow": "2019",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3682879,
+      "lng": -71.0977827
+    }
+  },
+  {
+    "address": "1220 Cambridge St, Cambridge, MA 02139",
+    "newLocationName": "Hot Chix",
+    "currentDescription": "A restaurant selling fried chicken and fried chicken sandwiches",
+    "startedAtBowAs": "Hotchix",
+    "descriptionAtBow": "A popup fried chicken spot",
+    "openedAtBow": "2019",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3731458,
+      "lng": -71.0978276
+    }
+  },
+  {
+    "address": "114 South Street, Jamaica Plain, MA 02130",
+    "newLocationName": "Little Cocoa Bean",
+    "currentDescription": "A retail shop and tot cafe selling family friendly food in an age inclusive environment",
+    "startedAtBowAs": "Little Cocoa Bean",
+    "descriptionAtBow": "A popup selling goods for babies and children",
+    "openedAtBow": "2022",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.306051,
+      "lng": -71.11470849999999
+    }
+  },
+  {
+    "address": "611 Columbia Rd, Dorchester, MA 02125",
+    "newLocationName": "Comfort Kitchen",
+    "currentDescription": "A James Beard award finalist restaurant that celebrates the food and flavors of the African Diaspora connected from Asia to the America",
+    "startedAtBowAs": "Comfort Kitchen",
+    "descriptionAtBow": "A popup testing out recipes in anticipation of opening a full service restaurant",
+    "openedAtBow": "2020",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3174714,
+      "lng": -71.064045
+    }
+  },
+  {
+    "address": "277 Border street, East Boston MA 02128",
+    "newLocationName": "Petrova",
+    "currentDescription": "A chocolate shop dedicated to creating artisan bonbons with complex, balanced and consistent flavors using ethically sourced, high quality ingredients.",
+    "startedAtBowAs": "Petrova",
+    "descriptionAtBow": "A popup selling beautiful chocolates",
+    "openedAtBow": "2021",
+    "layer": "Journey",
+    "layerDetail": "Popup",
+    "coords": {
+      "lat": 42.3774028,
+      "lng": -71.0396605
+    }
+  }
+];
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 42.3736, lng: -71.1097 },
+                zoom: 8,
+                styles: [
+            {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
+            {
+                featureType: 'administrative',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#c9b2a6'}]
+            },
+            {
+                featureType: 'administrative.land_parcel',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#dcd2be'}]
+            },
+            {
+                featureType: 'administrative.land_parcel',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#ae9e90'}]
+            },
+            {
+                featureType: 'landscape.natural',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#93817c'}]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#a5b076'}]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#447530'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{color: '#f5f1e6'}]
+            },
+            {
+                featureType: 'road.arterial',
+                elementType: 'geometry',
+                stylers: [{color: '#fdfcf8'}]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry',
+                stylers: [{color: '#f8c967'}]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#e9bc62'}]
+            },
+            {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry',
+                stylers: [{color: '#e98d58'}]
+            },
+            {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#db8555'}]
+            },
+            {
+                featureType: 'road.local',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#806b63'}]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#8f7d77'}]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'labels.text.stroke',
+                stylers: [{color: '#ebe3cd'}]
+            },
+            {
+                featureType: 'transit.station',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#b9d3c2'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#92998d'}]
+            }
+        ],
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+            });
+            addMarkers(locations);
+        }
+
+        function addMarkers(locations) {
+            locations.forEach(location => {
+                const iconImage = getMarkerImage(location.layerDetail);
+                const marker = new google.maps.Marker({
+                    position: location.coords,
+                    map: map,
+                    title: location.newLocationName,
+                    icon: iconImage
+                });
+                marker.addListener('click', function() {
+                    openModal(location);
+                });
+            });
+        }
+
+        function getMarkerImage(layerDetail) {
+            switch(layerDetail) {
+                case "First B&M":
+                    return 'data:image/png;base64,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';
+                case "Popup":
+                    return 'data:image/png;base64,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';
+                default:
+                    return 'data:image/png;base64,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';
+            }
+        }
+
+        function openModal(location) {
+            const modal = document.getElementById('myModal');
+            document.getElementById('modalTitle').textContent = location.newLocationName;
+            document.getElementById('modalAddress').textContent = "Address: " + location.address;
+            document.getElementById('modalDescription').textContent = "Description: " + location.currentDescription;
+            document.getElementById('modalStartedAs').textContent = "Started as: " + location.startedAtBowAs;
+            document.getElementById('modalBowDescription').textContent = "Description at Bow: " + location.descriptionAtBow;
+            document.getElementById('modalOpened').textContent = "Opened at Bow: " + location.openedAtBow;
+            document.getElementById('modalLayer').textContent = "Layer: " + location.layer;
+            document.getElementById('modalLayerDetail').textContent = "Layer Detail: " + location.layerDetail;
+
+            modal.style.display = "block";
+            const closeBtn = document.getElementsByClassName("close")[0];
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            };
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
+    </script>
+</body>
+</html>
