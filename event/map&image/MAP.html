@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map with Geocoded Addresses</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=image&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHPa9Galho8-lZB0mgM8Rw4I-YbNUhcUk&callback=initMap" async defer></script>
     <style>
         body, html {
             height: 100%;
@@ -55,7 +55,8 @@
         }
 
         .logo-container {
-            text-align: center;
+          margin-top: 15px;
+          text-align: center;
         }
 
         .modal-logo {
@@ -75,7 +76,32 @@
           vertical-align: top;
           object-fit: cover;
           border-radius: 5px;
+          max-height: 150px;
         }
+
+        @media only screen and (max-width: 600px) {
+          .modal-content {
+            background-color: #00BCD4;
+            margin: 15% auto;
+            padding: 6px;
+            border: 1px solid #777070;
+            width: 95%;
+            box-shadow: 0 4px 6px rgb(191 138 138 / 10%);
+            border-radius: 7px;
+          }
+          .inline-image {
+              width: 98%;
+              margin: 3px 0px;
+              display: inline-block;
+              vertical-align: top;
+              object-fit: cover;
+              border-radius: 5px;
+              max-height: 200px;
+          }
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -343,10 +369,8 @@
             document.getElementById('modalLayerDetail').textContent = "Layer Detail: " + location.layerDetail;
 
             var imageContainer = document.querySelector('.image-container');
-
             // Clear existing images if any
             imageContainer.innerHTML = '';
-
             // Loop through images and create an <img> tag for each
             location.images.forEach(function(imageUrl) {
                 var img = document.createElement('img');
