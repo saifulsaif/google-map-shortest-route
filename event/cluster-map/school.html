@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Map</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=api_key&callback=initMap" async defer></script>
+    <script src="https://unpkg.com/@google/markerclusterer"></script>
     <style>
         body{
             margin: 0;
@@ -149,7 +151,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
             color: #fff;
         }
 
@@ -157,6 +158,9 @@
             background-color: #0b2848;
             width: 50px;
             transition: transform 0.4s;
+            font-family: sans-serif;
+            font-weight: 700;
+            font-size: 21px; 
         }
         .explore-btn:hover{
             transform: scale(1.1);
@@ -164,10 +168,27 @@
 
         .consult-btn {
             background-color: #d9af09;
-             transition: transform 0.4s;
+            transition: transform 0.4s;
+            font-family: sans-serif;
+            font-weight: 700;
+            font-size: 21px; 
         }
         .consult-btn:hover{
             transform: scale(1.1);
+        }
+        .discover{
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            background: cadetblue;
+            font-family: sans-serif;
+            font-weight: 700;
+            font-size: 21px; 
         }
 
 
@@ -263,8 +284,6 @@
 </head>
 <body>
     <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=api_key&callback=initMap" async defer></script>
-    <script src="https://unpkg.com/@google/markerclusterer"></script>
     <i class="filter-icon">🔍</i>
     <div id="filterForm">
         <form id="filterOptions">
@@ -311,32 +330,31 @@
     </div>
 
     <script>
-         let map;
-         let markers = [];
+        let map;
+        let markers = [];
 
-           function closeCard() {
-        document.getElementById("myModal").style.display = "none";
-    }
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 39.88669, lng: -4.062473 }, // Adjust as needed
-                zoom: 3,
-                styles: [
-                    {
-                        featureType: "poi",
-                        elementType: "labels",
-                        stylers: [{ visibility: "off" }]
-                    },
-                    {
-                        featureType: "transit",
-                        elementType: "labels.icon",
-                        stylers: [{ visibility: "off" }]
-                    }
-                ],
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false,
-            });
-
+          function closeCard() {
+       document.getElementById("myModal").style.display = "none";
+   }
+       function initMap() {
+           map = new google.maps.Map(document.getElementById('map'), {
+               center: { lat: 39.88669, lng: -4.062473 }, // Adjust as needed
+               zoom: 3,
+               styles: [
+                   {
+                       featureType: "poi",
+                       elementType: "labels",
+                       stylers: [{ visibility: "off" }]
+                   },
+                   {
+                       featureType: "transit",
+                       elementType: "labels.icon",
+                       stylers: [{ visibility: "off" }]
+                   }
+               ],
+               mapTypeId: google.maps.MapTypeId.ROADMAP,
+               mapTypeControl: false,
+           });
   
             const locations = [
 {
@@ -46036,9 +46054,7 @@
 }
 ];
 
-        //   var markers =  addMarkers(locations); // Ensure you fetch or define locations
-
-        var location_markers = locations.map(function(location) {
+      var location_markers = locations.map(function(location) {
                 var marker = new google.maps.Marker({
                     position: {lat: parseFloat(location.lat), lng: parseFloat(location.lng)},
                     icon: 'data:image/png;base64,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'
@@ -46062,9 +46078,18 @@
             });
         }
 
+        document.querySelector('.filter-icon').addEventListener('click', function() {
+            var filterForm = document.getElementById('filterForm');
+            // Check if the filter form is currently displayed
+            if (filterForm.style.display === 'block') {
+                filterForm.style.display = 'none'; // Hide the form if it is shown
+            } else {
+                filterForm.style.display = 'block'; // Show the form if it is hidden
+            }
+        });
 
         function addMarkers(locations) {
-            return locations.forEach(school => {
+            locations.forEach(school => {
                 const latLng = new google.maps.LatLng(parseFloat(school.lat), parseFloat(school.lng));
                 const marker = new google.maps.Marker({
                     position: latLng,
@@ -46079,19 +46104,7 @@
                     openModal(school);
                 });
             });
- 
         }
-
-
-        document.querySelector('.filter-icon').addEventListener('click', function() {
-            var filterForm = document.getElementById('filterForm');
-            // Check if the filter form is currently displayed
-            if (filterForm.style.display === 'block') {
-                filterForm.style.display = 'none'; // Hide the form if it is shown
-            } else {
-                filterForm.style.display = 'block'; // Show the form if it is hidden
-            }
-        });
     
 
         function openModal(school) {
@@ -46105,28 +46118,26 @@
                     <h2>${school.hs_name}</h2>
                     <div class="main-content">
                         <div class="content">
-                            <p class="custom-badge"><strong>${school.city}:</strong > ${school.region}</p>
+                            <p class="custom-badge"><strong>${school.school_form}</strong ></p>
                             <div class="highlights">
                                 <strong>Highlights:</strong>
                                 <ul>
-                                    <li>Location: ${school.location}</li>
-                                    <li>Phone: ${school.phone}</li>
-                                    <li>Email: ${school.email}</li>
+                                    <li>Location: ${school.front_location} </li>
+                                    <li>Address: ${school.city} ${school.state} ${school.country}</li>
+                                    <li>School Type: ${school.school_type}</li>
                                     <li>${school.school_form}</li>
-                                    <li>                
-                                        <p><strong>Link:</strong> <a href="${ school.link}" target="_blank">Visit school page</a></p>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <img id="modalLogo" src="${ cleanImageUrl(school.front_image) }" alt="School Image">
                     </div>
                     <div class="buttons">
-                        <button class="explore-btn">Public</button>
-                        <button class="consult-btn">Private</button>
+                         <a class="discover" href="${ school.link}" target="_blank">Discover Now</a>
+                        <button class="consult-btn">Get Advice</button>
                     </div>
                 </div>
                 `;
+
 
             modal.style.display = "block";
             const closeBtn = document.getElementsByClassName("close")[0];
@@ -46183,16 +46194,13 @@
         }
 
 
-        function cleanImageUrl(url) {
+    function cleanImageUrl(url) {
             $image =  url.replace(/(\.\w+),\d+/, '$1');
 
             return  $image.replace(/(\.\w+),\d+/, '$1');
         }
 
-
-
-
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=api_key&callback=initMap"></script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=api_key&callback=initMap"></script>
 </body>
 </html>
