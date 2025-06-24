@@ -59,7 +59,8 @@
       border-radius: 5px;
       background-color: #f8f9fa;
       transition: all 0.2s;
-      cursor: pointer;
+      cursor: move;
+      border-left: 4px solid transparent;
     }
     
     .event-item:hover {
@@ -68,25 +69,19 @@
     }
     
     .event-item[data-group-color="1"] {
-      border-left: 4px solid #667eea;
+      border-left-color: #667eea;
     }
     .event-item[data-group-color="2"] {
-      border-left: 4px solid #f5576c;
+      border-left-color: #f5576c;
     }
     .event-item[data-group-color="3"] {
-      border-left: 4px solid #4facfe;
+      border-left-color: #4facfe;
     }
     .event-item[data-group-color="4"] {
-      border-left: 4px solid #5ee7df;
+      border-left-color: #5ee7df;
     }
     .event-item[data-group-color="5"] {
-      border-left: 4px solid #a18cd1;
-    }
-    
-    .event-time {
-      font-size: 0.8rem;
-      color: #6c757d;
-      margin-bottom: 5px;
+      border-left-color: #a18cd1;
     }
     
     .event-teams {
@@ -263,7 +258,7 @@
   <div class="main-container">
     <div class="calendar-container">
       <div class="calendar-header">
-        <h2 class="m-0">Alle Termine</h2>
+        <h2 class="m-0">Tournament Schedule</h2>
         <div class="d-flex gap-2">
           <button class="btn btn-sm btn-outline-light" id="prev-week">
             <i class="bi bi-chevron-left"></i>
@@ -284,31 +279,10 @@
     </div>
 
     <div class="events-sidebar">
-      <div class="sidebar-header">Zukünftige Termine</div>
-      <div id="events-list" class="d-none" >
+      <div class="sidebar-header">Available Matches</div>
+      <div id="events-list" class="d-flex flex-column gap-3">
         <!-- Events will be populated by JavaScript -->
       </div>
-      <div id="events-list-external" class="d-flex flex-column gap-3">
-            <div class="event-item" data-group-color="2" data-game-id="3">
-              <div class="event-teams">Pedro Torrão / Rita Torrão vs Raquel Pinhal / Gilberto Quintas</div>
-              <div class="event-court">Campo 2</div>
-            </div><div class="event-item" data-group-color="1" data-game-id="1">
-              <div class="event-teams">Tiago Alves / Nádia Tarouca vs Ricardo Santos / Carolina Galiano</div>
-              <div class="event-court">Campo 1</div>
-            </div><div class="event-item" data-group-color="3" data-game-id="5">
-              <div class="event-teams">Arnaldo / Susana vs Ruben Vicente / Filipa Ganhão</div>
-              <div class="event-court">Campo 3</div>
-            </div><div class="event-item" data-group-color="1" data-game-id="2">
-              <div class="event-teams">Sofia Cunha / Rui Torres vs Ricardo Santos / Carolina Galiano</div>
-              <div class="event-court">Campo 1</div>
-            </div><div class="event-item" data-group-color="2" data-game-id="4">
-              <div class="event-teams">Pedro Soares / Daniela Martins vs Raquel Pinhal / Gilberto Quintas</div>
-              <div class="event-court">Campo 2</div>
-            </div><div class="event-item" data-group-color="3" data-game-id="6">
-              <div class="event-teams">João Varela / Carmos Vasconcelos vs Ruben Vicente / Filipa Ganhão</div>
-              <div class="event-court">Campo 3</div>
-            </div>
-        </div>
     </div>
   </div>
 
@@ -353,7 +327,7 @@
     <div id="successToast" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body">
-          Game successfully rescheduled!
+          Game successfully scheduled!
         </div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
@@ -415,7 +389,7 @@
           title: "João Varela / Carmos Vasconcelos vs Ruben Vicente / Filipa Ganhão",
           startTime: "11:45",
           endTime: "13:15",
-          group: "Campo 1",
+          group: "Campo 3",
           court: "Campo 3",
           groupColor: 3,
         }
@@ -531,12 +505,65 @@
       ]
     };
 
+    // Available games data (for the sidebar)
+ const availableGames = {
+  21: {
+    id: 21,
+    title: "Pedro Torrão / Rita Torrão vs Raquel Pinhal / Gilberto Quintas",
+    group: "Campo 2",
+    court: "Campo 2",
+    groupColor: 2,
+    duration: 1.5
+  },
+  22: {
+    id: 22,
+    title: "Tiago Alves / Nádia Tarouca vs Ricardo Santos / Carolina Galiano",
+    group: "Campo 1",
+    court: "Campo 1",
+    groupColor: 1,
+    duration: 1.5
+  },
+  23: {
+    id: 23,
+    title: "Arnaldo / Susana vs Ruben Vicente / Filipa Ganhão",
+    group: "Campo 3",
+    court: "Campo 3",
+    groupColor: 3,
+    duration: 1.5
+  },
+  24: {
+    id: 24,
+    title: "Sofia Cunha / Rui Torres vs Ricardo Santos / Carolina Galiano",
+    group: "Campo 1",
+    court: "Campo 1",
+    groupColor: 1,
+    duration: 1.5
+  },
+  25: {
+    id: 25,
+    title: "Pedro Soares / Daniela Martins vs Raquel Pinhal / Gilberto Quintas",
+    group: "Campo 2",
+    court: "Campo 2",
+    groupColor: 2,
+    duration: 1.5
+  },
+  26: {
+    id: 26,
+    title: "João Varela / Carmos Vasconcelos vs Ruben Vicente / Filipa Ganhão",
+    group: "Campo 3",
+    court: "Campo 3",
+    groupColor: 3,
+    duration: 1.5
+  }
+};
+
     // Initialize with current date
     let currentDate = new Date('2025-06-23');
     const gameModal = new bootstrap.Modal(document.getElementById('gameModal'));
     const successToast = new bootstrap.Toast(document.getElementById('successToast'));
     let draggedGame = null;
     let draggedGameElement = null;
+    let isDraggingFromCalendar = false;
 
     // Generate time slots from 6:00 AM to 10:00 PM
     const timeSlots = [];
@@ -551,7 +578,7 @@
     function initCalendar() {
       renderDateNavigation();
       renderCalendarGrid(currentDate);
-      renderEventsList(currentDate);
+      refreshEventsSidebar();
       setupDragAndDrop();
     }
 
@@ -583,7 +610,6 @@
           dateItem.classList.add('active');
           currentDate = new Date(dateItem.dataset.date);
           renderCalendarGrid(currentDate);
-          renderEventsList(currentDate);
           setupDragAndDrop();
         });
         
@@ -627,7 +653,7 @@
               gameElement.className = 'game-event';
               gameElement.innerHTML = game.title.split(' vs ').join('<br>vs ');
               gameElement.dataset.gameId = game.id;
-              gameElement.dataset.groupColor = game.groupColor; // Using data attribute
+              gameElement.dataset.groupColor = game.groupColor;
               gameElement.draggable = true;
               
               gameElement.addEventListener('click', (e) => {
@@ -650,70 +676,71 @@
         });
       });
     }
-    
-    // Render the events list for the sidebar
-    function renderEventsList(date) {
+
+    // Refresh the events sidebar
+    function refreshEventsSidebar() {
       const eventsList = document.getElementById('events-list');
       eventsList.innerHTML = '';
       
-      const dateStr = formatDate(date);
-      const gamesForDate = tournamentData[dateStr] || [];
-      
-      // Sort games by start time
-      const sortedGames = [...gamesForDate].sort((a, b) => {
-        return a.startTime.localeCompare(b.startTime);
-      });
-      
-      sortedGames.forEach(game => {
+      Object.values(availableGames).forEach(game => {
         const eventItem = document.createElement('div');
         eventItem.className = 'event-item';
         eventItem.dataset.groupColor = game.groupColor;
         eventItem.dataset.gameId = game.id;
+        eventItem.draggable = true;
         
         eventItem.innerHTML = `
-          <div class="event-time">${game.startTime} - ${game.endTime}</div>
           <div class="event-teams">${game.title}</div>
           <div class="event-court">${game.court}</div>
         `;
         
-        eventItem.addEventListener('click', () => {
-          showGameDetails(game);
+        eventItem.addEventListener('dragstart', (e) => {
+          draggedGame = availableGames[game.id];
+          draggedGameElement = e.target;
+          isDraggingFromCalendar = false;
+          e.target.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', game.id);
+          e.dataTransfer.effectAllowed = 'copy';
+        });
+        
+        eventItem.addEventListener('dragend', (e) => {
+          e.target.classList.remove('dragging');
         });
         
         eventsList.appendChild(eventItem);
       });
-      
-      // If no events, show message
-      if (sortedGames.length === 0) {
-        eventsList.innerHTML = '<div class="text-muted">No matches scheduled for this day</div>';
-      }
     }
 
     // Set up drag and drop functionality
     function setupDragAndDrop() {
+      // Setup drag for calendar events
       const gameEvents = document.querySelectorAll('.game-event');
       const gameSlots = document.querySelectorAll('.game-slot');
       
-      // Drag start
+      // Drag start for calendar events
       gameEvents.forEach(event => {
         event.addEventListener('dragstart', (e) => {
-          draggedGame = findGameById(e.target.dataset.gameId);
+          const gameId = e.target.dataset.gameId;
+          const dateStr = formatDate(currentDate);
+          draggedGame = tournamentData[dateStr].find(game => game.id == gameId);
           draggedGameElement = e.target;
+          isDraggingFromCalendar = true;
           e.target.classList.add('dragging');
-          e.dataTransfer.setData('text/plain', e.target.dataset.gameId);
+          e.dataTransfer.setData('text/plain', gameId);
           e.dataTransfer.effectAllowed = 'move';
         });
         
         event.addEventListener('dragend', (e) => {
           e.target.classList.remove('dragging');
+          isDraggingFromCalendar = false;
         });
       });
       
-      // Drag over
+      // Drag over for calendar slots
       gameSlots.forEach(slot => {
         slot.addEventListener('dragover', (e) => {
           e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
+          e.dataTransfer.dropEffect = isDraggingFromCalendar ? 'move' : 'copy';
           slot.classList.add('drop-target');
         });
         
@@ -721,7 +748,7 @@
           slot.classList.remove('drop-target');
         });
         
-        slot.addEventListener('drop', (e) => {
+        slot.addEventListener('drop', async (e) => {
           e.preventDefault();
           slot.classList.remove('drop-target');
           
@@ -732,32 +759,139 @@
           const newHour = parseInt(newTimeSlot.split(':')[0]);
           
           // Calculate new start and end times
-          const duration = getDurationInHours(draggedGame);
+          const duration = isDraggingFromCalendar ? 
+            getDurationInHours(draggedGame) : 
+            draggedGame.duration;
+          
           const newStartTime = `${newHour.toString().padStart(2, '0')}:00`;
-          const newEndTime = `${(newHour + duration).toString().padStart(2, '0')}:00`;
+          const newEndTime = `${(newHour + duration).toString().padStart(2, '0')}:${(duration % 1 === 0.5) ? '30' : '00'}`;
           
-          // Update the game data
+          // Get the current date
           const dateStr = formatDate(currentDate);
-          const gameIndex = tournamentData[dateStr].findIndex(g => g.id == draggedGame.id);
           
-          if (gameIndex !== -1) {
-            tournamentData[dateStr][gameIndex] = {
+          let updatedGame;
+          
+          if (isDraggingFromCalendar) {
+            // Moving an existing game
+            const originalDateStr = findGameDate(draggedGame.id);
+            if (originalDateStr) {
+              tournamentData[originalDateStr] = tournamentData[originalDateStr].filter(
+                game => game.id != draggedGame.id
+              );
+            }
+            
+            // Update the game with new position
+            draggedGame.startTime = newStartTime;
+            draggedGame.endTime = newEndTime;
+            draggedGame.group = newGroup;
+            
+            // Add to new position
+            if (!tournamentData[dateStr]) {
+              tournamentData[dateStr] = [];
+            }
+            tournamentData[dateStr].push(draggedGame);
+            
+            updatedGame = draggedGame;
+          } else {
+            // Adding a new game from available list
+            const newId = Date.now();
+            const newGame = {
               ...draggedGame,
               startTime: newStartTime,
               endTime: newEndTime,
-              group: newGroup
+              group: newGroup,
+              id: newId
             };
+            
+            if (!tournamentData[dateStr]) {
+              tournamentData[dateStr] = [];
+            }
+            tournamentData[dateStr].push(newGame);
+            
+            updatedGame = newGame;
+            
+            // Remove from available games
+            delete availableGames[draggedGame.id];
+            
+            // Remove from DOM
+            draggedGameElement.remove();
+          }
+          
+          try {
+            const response = await updateGameOnServer(updatedGame, dateStr, isDraggingFromCalendar);
+            console.log('API response:', response);
             
             // Show success message
             successToast.show();
             
-            // Re-render the calendar and events list
+            // Re-render the calendar to show the new event
             renderCalendarGrid(currentDate);
-            renderEventsList(currentDate);
+            
+            // Refresh the events sidebar if we moved an external event
+            if (!isDraggingFromCalendar) {
+              refreshEventsSidebar();
+            }
+            
             setupDragAndDrop();
+          } catch (error) {
+            console.error('Error updating game:', error);
+            // Handle error (show error message, revert changes, etc.)
           }
         });
       });
+    }
+
+    // Function to update game on server
+    async function updateGameOnServer(game, dateStr, isUpdate) {
+      const endpoint = isUpdate ? '/api/games/update' : '/api/games/create';
+      const method = isUpdate ? 'PUT' : 'POST';
+      
+      const payload = {
+        id: game.id,
+        title: game.title,
+        startTime: game.startTime,
+        endTime: game.endTime,
+        group: game.group,
+        court: game.court,
+        groupColor: game.groupColor,
+        date: dateStr
+      };
+      
+      console.log('Sending to server:', payload); // For debugging
+      
+      // In a real app, you would uncomment this fetch call
+      /*
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      return response.json();
+      */
+      
+      // For demo purposes, return a mock response
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve({ success: true, game: payload });
+        }, 500);
+      });
+    }
+
+    // Helper function to find which date a game is scheduled on
+    function findGameDate(gameId) {
+      for (const dateStr in tournamentData) {
+        if (tournamentData[dateStr].some(game => game.id == gameId)) {
+          return dateStr;
+        }
+      }
+      return null;
     }
 
     // Helper function to create grid header
@@ -786,6 +920,13 @@
              (gameStartHour === slotHour);
     }
 
+    // Helper function to get duration in hours
+    function getDurationInHours(game) {
+      const start = parseInt(game.startTime.split(':')[0]);
+      const end = parseInt(game.endTime.split(':')[0]);
+      return end - start;
+    }
+
     // Helper function to check if this is the current time
     function isCurrentTime(slotTime, dateStr) {
       const now = new Date();
@@ -811,19 +952,6 @@
       document.getElementById('gameCourt').textContent = game.court;
       
       gameModal.show();
-    }
-
-    // Helper function to find game by ID
-    function findGameById(gameId) {
-      const dateStr = formatDate(currentDate);
-      return tournamentData[dateStr].find(game => game.id == gameId);
-    }
-
-    // Helper function to get duration in hours
-    function getDurationInHours(game) {
-      const start = parseInt(game.startTime.split(':')[0]);
-      const end = parseInt(game.endTime.split(':')[0]);
-      return end - start;
     }
 
     // Helper function to format date as YYYY-MM-DD
