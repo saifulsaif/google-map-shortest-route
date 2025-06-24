@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Schedule</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    /* Base styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    /* Main container */
+    .main-container {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+    }
+    
+    /* Calendar container - 80% width */
+    .calendar-container {
+      flex: 0 0 80%;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    /* Events sidebar - 20% width */
+    .events-sidebar {
+      flex: 0 0 20%;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 20px;
+      overflow-y: auto;
+      max-height: calc(100vh - 40px);
+      position: sticky;
+      top: 20px;
+    }
+    
+    .sidebar-header {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+      color: #495057;
+    }
+    
+    .event-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      background-color: #f8f9fa;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .event-item:hover {
+      transform: translateX(3px);
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+    
+    .event-item[data-group-color="1"] {
+      border-left: 4px solid #667eea;
+    }
+    .event-item[data-group-color="2"] {
+      border-left: 4px solid #f5576c;
+    }
+    .event-item[data-group-color="3"] {
+      border-left: 4px solid #4facfe;
+    }
+    .event-item[data-group-color="4"] {
+      border-left: 4px solid #5ee7df;
+    }
+    .event-item[data-group-color="5"] {
+      border-left: 4px solid #a18cd1;
+    }
+    
+    .event-time {
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-bottom: 5px;
+    }
+    
+    .event-teams {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .event-court {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+    
+    /* Header styles */
+    .calendar-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Date navigation */
+    .date-nav {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      background-color: #f1f3f5;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .date-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .date-item:hover {
+      background-color: #e9ecef;
+    }
+    .date-item.active {
+      background-color: #667eea;
+      color: white;
+      font-weight: bold;
+    }
+    
+    /* Calendar grid layout */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: 100px repeat(3, 1fr);
+      width: 100%;
+    }
+    .grid-header {
+      background-color: #495057;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .time-slot {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-right: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
+      text-align: center;
+      font-weight: 500;
+    }
+    .group-header {
+      background-color: #6c757d;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .game-slot {
+      padding: 5px;
+      border-right: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
+      min-height: 60px;
+      position: relative;
+    }
+    
+    /* Event styles - now using data attributes */
+    .game-event {
+      background-color: #e9ecef;
+      border-radius: 5px;
+      padding: 8px;
+      margin: 2px;
+      font-size: 12px;
+      cursor: move;
+      transition: all 0.2s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .game-event:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Color classes based on data attributes */
+    .game-event[data-group-color="1"] {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .game-event[data-group-color="2"] {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+    .game-event[data-group-color="3"] {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+    .game-event[data-group-color="4"] {
+      background: linear-gradient(135deg, #5ee7df 0%, #66a6ff 100%);
+      color: white;
+    }
+    .game-event[data-group-color="5"] {
+      background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+      color: white;
+    }
+    
+    /* Utility classes */
+    .empty-slot {
+      background-color: #f8f9fa;
+      height: 100%;
+    }
+    .current-time {
+      background-color: rgba(102, 126, 234, 0.1);
+      border-left: 3px solid #667eea;
+    }
+    .dragging {
+      opacity: 0.5;
+      border: 2px dashed #667eea;
+    }
+    .drop-target {
+      background-color: rgba(102, 126, 234, 0.2);
+      border: 2px dashed #667eea;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 1200px) {
+      .main-container {
+        flex-direction: column;
+      }
+      .calendar-container, .events-sidebar {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+      .events-sidebar {
+        max-height: 300px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .calendar-grid {
+        grid-template-columns: 80px repeat(3, 1fr);
+      }
+      .game-event {
+        font-size: 10px;
+        padding: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <h2 class="m-0">Alle Termine</h2>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-light" id="prev-week">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-light" id="next-week">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="date-nav" id="date-nav">
+        <!-- Dates will be populated by JavaScript -->
+      </div>
+      
+      <div class="calendar-grid" id="calendar-grid">
+        <!-- Grid will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="events-sidebar">
+      <div class="sidebar-header">Zukünftige Termine</div>
+      <div id="events-list" class="d-none" >
+        <!-- Events will be populated by JavaScript -->
+      </div>
+      <div id="events-list-external" class="d-flex flex-column gap-3">
+            <div class="event-item" data-group-color="2" data-game-id="3">
+              <div class="event-teams">Pedro Torrão / Rita Torrão vs Raquel Pinhal / Gilberto Quintas</div>
+              <div class="event-court">Campo 2</div>
+            </div><div class="event-item" data-group-color="1" data-game-id="1">
+              <div class="event-teams">Tiago Alves / Nádia Tarouca vs Ricardo Santos / Carolina Galiano</div>
+              <div class="event-court">Campo 1</div>
+            </div><div class="event-item" data-group-color="3" data-game-id="5">
+              <div class="event-teams">Arnaldo / Susana vs Ruben Vicente / Filipa Ganhão</div>
+              <div class="event-court">Campo 3</div>
+            </div><div class="event-item" data-group-color="1" data-game-id="2">
+              <div class="event-teams">Sofia Cunha / Rui Torres vs Ricardo Santos / Carolina Galiano</div>
+              <div class="event-court">Campo 1</div>
+            </div><div class="event-item" data-group-color="2" data-game-id="4">
+              <div class="event-teams">Pedro Soares / Daniela Martins vs Raquel Pinhal / Gilberto Quintas</div>
+              <div class="event-court">Campo 2</div>
+            </div><div class="event-item" data-group-color="3" data-game-id="6">
+              <div class="event-teams">João Varela / Carmos Vasconcelos vs Ruben Vicente / Filipa Ganhão</div>
+              <div class="event-court">Campo 3</div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Game Details Modal -->
+  <div class="modal fade" id="gameModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gameModalTitle">Game Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <h6 id="gameTeams"></h6>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-calendar"></i>
+              <span id="gameDate"></span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-clock"></i>
+              <span id="gameTime"></span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-people"></i>
+              <span id="gameGroup"></span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-geo-alt"></i>
+              <span id="gameCourt"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast for success messages -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="successToast" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          Game successfully rescheduled!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sample data - in a real app, this would come from your backend
+    const tournamentData = {
+      "2025-06-23": [
+        {
+          id: 1,
+          title: "Tiago Alves / Nádia Tarouca vs Ricardo Santos / Carolina Galiano",
+          startTime: "09:00",
+          endTime: "10:30",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 1,
+        },
+        {
+          id: 2,
+          title: "Sofia Cunha / Rui Torres vs Ricardo Santos / Carolina Galiano",
+          startTime: "10:45",
+          endTime: "12:15",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 1,
+        },
+        {
+          id: 3,
+          title: "Pedro Torrão / Rita Torrão vs Raquel Pinhal / Gilberto Quintas",
+          startTime: "07:00",
+          endTime: "08:30",
+          group: "Campo 2",
+          court: "Campo 2",
+          groupColor: 2,
+        },
+        {
+          id: 4,
+          title: "Pedro Soares / Daniela Martins vs Raquel Pinhal / Gilberto Quintas",
+          startTime: "11:45",
+          endTime: "13:15",
+          group: "Campo 2",
+          court: "Campo 2",
+          groupColor: 2,
+        },
+        {
+          id: 5,
+          title: "Arnaldo / Susana vs Ruben Vicente / Filipa Ganhão",
+          startTime: "09:00",
+          endTime: "10:30",
+          group: "Campo 3",
+          court: "Campo 3",
+          groupColor: 3,
+        },
+        {
+          id: 6,
+          title: "João Varela / Carmos Vasconcelos vs Ruben Vicente / Filipa Ganhão",
+          startTime: "11:45",
+          endTime: "13:15",
+          group: "Campo 1",
+          court: "Campo 3",
+          groupColor: 3,
+        }
+      ],
+      "2025-06-24": [
+        {
+          id: 7,
+          title: "Sofia Cunha / Rui Torres vs Tiago Alves / Nádia Tarouca",
+          startTime: "10:40",
+          endTime: "12:10",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 2,
+        },
+        {
+          id: 8,
+          title: "Pedro Soares / Daniela Martins vs Pedro Torrão / Rita Torrão",
+          startTime: "14:00",
+          endTime: "15:30",
+          group: "Campo 2",
+          court: "Campo 2",
+          groupColor: 1,
+        },
+        {
+          id: 9,
+          title: "João Varela / Carmos Vasconcelos vs Arnaldo / Susana",
+          startTime: "15:40",
+          endTime: "17:10",
+          group: "Campo 3",
+          court: "Campo 3",
+          groupColor: 2,
+        }
+      ],
+      "2025-06-25": [
+        {
+          id: 10,
+          title: "Ricardo Santos / Carolina Galiano vs Sofia Cunha / Rui Torres",
+          startTime: "08:30",
+          endTime: "10:00",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 1,
+        },
+        {
+          id: 11,
+          title: "Raquel Pinhal / Gilberto Quintas vs Pedro Soares / Daniela Martins",
+          startTime: "11:00",
+          endTime: "12:30",
+          group: "Campo 2",
+          court: "Campo 2",
+          groupColor: 2,
+        }
+      ],
+      "2025-06-26": [
+        {
+          id: 12,
+          title: "Tiago Alves / Nádia Tarouca vs Sofia Cunha / Rui Torres",
+          startTime: "09:00",
+          endTime: "10:30",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 1,
+        },
+        {
+          id: 13,
+          title: "Ruben Vicente / Filipa Ganhão vs João Varela / Carmos Vasconcelos",
+          startTime: "14:00",
+          endTime: "15:30",
+          group: "Campo 3",
+          court: "Campo 3",
+          groupColor: 3,
+        }
+      ],
+      "2025-06-27": [
+        {
+          id: 14,
+          title: "Final - Campo 1",
+          startTime: "10:00",
+          endTime: "11:30",
+          group: "Campo 1",
+          court: "Campo 1",
+          groupColor: 1,
+        },
+        {
+          id: 15,
+          title: "Final - Campo 2",
+          startTime: "12:00",
+          endTime: "13:30",
+          group: "Campo 2",
+          court: "Campo 2",
+          groupColor: 2,
+        },
+        {
+          id: 16,
+          title: "Final - Campo 3",
+          startTime: "14:00",
+          endTime: "15:30",
+          group: "Campo 3",
+          court: "Campo 3",
+          groupColor: 3,
+        }
+      ],
+      "2025-06-28": [
+        {
+          id: 17,
+          title: "Championship Final",
+          startTime: "18:00",
+          endTime: "19:30",
+          group: "Final",
+          court: "Campo Central",
+          groupColor: 1,
+        }
+      ]
+    };
+
+    // Initialize with current date
+    let currentDate = new Date('2025-06-23');
+    const gameModal = new bootstrap.Modal(document.getElementById('gameModal'));
+    const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+    let draggedGame = null;
+    let draggedGameElement = null;
+
+    // Generate time slots from 6:00 AM to 10:00 PM
+    const timeSlots = [];
+    for (let hour = 6; hour <= 22; hour++) {
+      timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+    }
+
+    // Groups to display
+    const groups = ['Campo 1', 'Campo 2', 'Campo 3'];
+
+    // Initialize the calendar
+    function initCalendar() {
+      renderDateNavigation();
+      renderCalendarGrid(currentDate);
+      renderEventsList(currentDate);
+      setupDragAndDrop();
+    }
+
+    // Render the date navigation
+    function renderDateNavigation() {
+      const dateNav = document.getElementById('date-nav');
+      dateNav.innerHTML = '';
+      
+      // Create 5 date items (current date and next 4 days)
+      for (let i = 0; i < 5; i++) {
+        const date = new Date(currentDate);
+        date.setDate(currentDate.getDate() + i);
+        
+        const dateItem = document.createElement('div');
+        dateItem.className = `date-item ${i === 0 ? 'active' : ''}`;
+        dateItem.dataset.date = formatDate(date);
+        
+        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+        const dayNumber = date.getDate();
+        const monthName = date.toLocaleDateString('en-US', { month: 'short' });
+        
+        dateItem.innerHTML = `
+          <div class="fw-bold">${dayName}</div>
+          <div>${dayNumber} ${monthName}</div>
+        `;
+        
+        dateItem.addEventListener('click', () => {
+          document.querySelectorAll('.date-item').forEach(item => item.classList.remove('active'));
+          dateItem.classList.add('active');
+          currentDate = new Date(dateItem.dataset.date);
+          renderCalendarGrid(currentDate);
+          renderEventsList(currentDate);
+          setupDragAndDrop();
+        });
+        
+        dateNav.appendChild(dateItem);
+      }
+    }
+
+    // Render the calendar grid for a specific date
+    function renderCalendarGrid(date) {
+      const calendarGrid = document.getElementById('calendar-grid');
+      calendarGrid.innerHTML = '';
+      
+      // Create header row
+      calendarGrid.appendChild(createGridHeader('Time'));
+      groups.forEach(group => {
+        calendarGrid.appendChild(createGridHeader(group));
+      });
+      
+      // Create time slots
+      const dateStr = formatDate(date);
+      const gamesForDate = tournamentData[dateStr] || [];
+      
+      timeSlots.forEach(timeSlot => {
+        // Time cell
+        calendarGrid.appendChild(createTimeSlot(timeSlot));
+        
+        // Group cells
+        groups.forEach(group => {
+          const gamesInSlot = gamesForDate.filter(game => 
+            game.group === group && isTimeInSlot(timeSlot, game.startTime, game.endTime)
+          );
+          
+          const groupCell = document.createElement('div');
+          groupCell.className = 'game-slot';
+          groupCell.dataset.group = group;
+          groupCell.dataset.timeSlot = timeSlot;
+          
+          if (gamesInSlot.length > 0) {
+            gamesInSlot.forEach(game => {
+              const gameElement = document.createElement('div');
+              gameElement.className = 'game-event';
+              gameElement.innerHTML = game.title.split(' vs ').join('<br>vs ');
+              gameElement.dataset.gameId = game.id;
+              gameElement.dataset.groupColor = game.groupColor; // Using data attribute
+              gameElement.draggable = true;
+              
+              gameElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showGameDetails(game);
+              });
+              
+              groupCell.appendChild(gameElement);
+            });
+          } else {
+            groupCell.innerHTML = '<div class="empty-slot"></div>';
+          }
+          
+          // Highlight current time
+          if (isCurrentTime(timeSlot, dateStr)) {
+            groupCell.classList.add('current-time');
+          }
+          
+          calendarGrid.appendChild(groupCell);
+        });
+      });
+    }
+    
+    // Render the events list for the sidebar
+    function renderEventsList(date) {
+      const eventsList = document.getElementById('events-list');
+      eventsList.innerHTML = '';
+      
+      const dateStr = formatDate(date);
+      const gamesForDate = tournamentData[dateStr] || [];
+      
+      // Sort games by start time
+      const sortedGames = [...gamesForDate].sort((a, b) => {
+        return a.startTime.localeCompare(b.startTime);
+      });
+      
+      sortedGames.forEach(game => {
+        const eventItem = document.createElement('div');
+        eventItem.className = 'event-item';
+        eventItem.dataset.groupColor = game.groupColor;
+        eventItem.dataset.gameId = game.id;
+        
+        eventItem.innerHTML = `
+          <div class="event-time">${game.startTime} - ${game.endTime}</div>
+          <div class="event-teams">${game.title}</div>
+          <div class="event-court">${game.court}</div>
+        `;
+        
+        eventItem.addEventListener('click', () => {
+          showGameDetails(game);
+        });
+        
+        eventsList.appendChild(eventItem);
+      });
+      
+      // If no events, show message
+      if (sortedGames.length === 0) {
+        eventsList.innerHTML = '<div class="text-muted">No matches scheduled for this day</div>';
+      }
+    }
+
+    // Set up drag and drop functionality
+    function setupDragAndDrop() {
+      const gameEvents = document.querySelectorAll('.game-event');
+      const gameSlots = document.querySelectorAll('.game-slot');
+      
+      // Drag start
+      gameEvents.forEach(event => {
+        event.addEventListener('dragstart', (e) => {
+          draggedGame = findGameById(e.target.dataset.gameId);
+          draggedGameElement = e.target;
+          e.target.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', e.target.dataset.gameId);
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        event.addEventListener('dragend', (e) => {
+          e.target.classList.remove('dragging');
+        });
+      });
+      
+      // Drag over
+      gameSlots.forEach(slot => {
+        slot.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          slot.classList.add('drop-target');
+        });
+        
+        slot.addEventListener('dragleave', () => {
+          slot.classList.remove('drop-target');
+        });
+        
+        slot.addEventListener('drop', (e) => {
+          e.preventDefault();
+          slot.classList.remove('drop-target');
+          
+          if (!draggedGame) return;
+          
+          const newGroup = slot.dataset.group;
+          const newTimeSlot = slot.dataset.timeSlot;
+          const newHour = parseInt(newTimeSlot.split(':')[0]);
+          
+          // Calculate new start and end times
+          const duration = getDurationInHours(draggedGame);
+          const newStartTime = `${newHour.toString().padStart(2, '0')}:00`;
+          const newEndTime = `${(newHour + duration).toString().padStart(2, '0')}:00`;
+          
+          // Update the game data
+          const dateStr = formatDate(currentDate);
+          const gameIndex = tournamentData[dateStr].findIndex(g => g.id == draggedGame.id);
+          
+          if (gameIndex !== -1) {
+            tournamentData[dateStr][gameIndex] = {
+              ...draggedGame,
+              startTime: newStartTime,
+              endTime: newEndTime,
+              group: newGroup
+            };
+            
+            // Show success message
+            successToast.show();
+            
+            // Re-render the calendar and events list
+            renderCalendarGrid(currentDate);
+            renderEventsList(currentDate);
+            setupDragAndDrop();
+          }
+        });
+      });
+    }
+
+    // Helper function to create grid header
+    function createGridHeader(text) {
+      const header = document.createElement('div');
+      header.className = text === 'Time' ? 'grid-header' : 'group-header';
+      header.textContent = text;
+      return header;
+    }
+
+    // Helper function to create time slot
+    function createTimeSlot(time) {
+      const timeSlot = document.createElement('div');
+      timeSlot.className = 'time-slot';
+      timeSlot.textContent = formatTimeDisplay(time);
+      return timeSlot;
+    }
+
+    // Helper function to check if a game falls in this time slot
+    function isTimeInSlot(slotTime, gameStart, gameEnd) {
+      const slotHour = parseInt(slotTime.split(':')[0]);
+      const gameStartHour = parseInt(gameStart.split(':')[0]);
+      const gameEndHour = parseInt(gameEnd.split(':')[0]);
+      
+      return (gameStartHour <= slotHour && slotHour < gameEndHour) || 
+             (gameStartHour === slotHour);
+    }
+
+    // Helper function to check if this is the current time
+    function isCurrentTime(slotTime, dateStr) {
+      const now = new Date();
+      const today = formatDate(now);
+      
+      if (today !== dateStr) return false;
+      
+      const currentHour = now.getHours();
+      const slotHour = parseInt(slotTime.split(':')[0]);
+      
+      return currentHour === slotHour;
+    }
+
+    // Show game details in modal
+    function showGameDetails(game) {
+      document.getElementById('gameModalTitle').textContent = game.group;
+      document.getElementById('gameTeams').textContent = game.title;
+      document.getElementById('gameDate').textContent = currentDate.toLocaleDateString('en-US', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      document.getElementById('gameTime').textContent = `${game.startTime} - ${game.endTime}`;
+      document.getElementById('gameGroup').textContent = game.group;
+      document.getElementById('gameCourt').textContent = game.court;
+      
+      gameModal.show();
+    }
+
+    // Helper function to find game by ID
+    function findGameById(gameId) {
+      const dateStr = formatDate(currentDate);
+      return tournamentData[dateStr].find(game => game.id == gameId);
+    }
+
+    // Helper function to get duration in hours
+    function getDurationInHours(game) {
+      const start = parseInt(game.startTime.split(':')[0]);
+      const end = parseInt(game.endTime.split(':')[0]);
+      return end - start;
+    }
+
+    // Helper function to format date as YYYY-MM-DD
+    function formatDate(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    // Helper function to format time display
+    function formatTimeDisplay(time) {
+      const hour = parseInt(time.split(':')[0]);
+      return hour > 12 ? `${hour - 12} PM` : hour === 12 ? '12 PM' : `${hour} AM`;
+    }
+
+    // Navigation buttons
+    document.getElementById('prev-week').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() - 7);
+      initCalendar();
+    });
+
+    document.getElementById('next-week').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() + 7);
+      initCalendar();
+    });
+
+    // Initialize the calendar
+    initCalendar();
+  </script>
+</body>
+</html>
